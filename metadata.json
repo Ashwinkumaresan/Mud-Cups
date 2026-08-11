@@ -1,0 +1,6 @@
+{
+  "name": "Mud Cups",
+  "description": "Food delivery app with deal carousels, cuisine filters, restaurant menus, favorites, cart management, and order tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
