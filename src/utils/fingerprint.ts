@@ -131,13 +131,31 @@ const getFonts = (): string => {
 
 // Hash function (SHA-256)
 const hashString = async (message: string): Promise<string> => {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  if (window.crypto && window.crypto.subtle) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  // Fallback for non-secure HTTP connections (like local network testing on mobile)
+  let hash = 0;
+  for (let i = 0; i < message.length; i++) {
+    const char = message.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(16);
 };
 
 export const generateFrontendFingerprint = async (): Promise<{ hash: string, signals: any }> => {
+  const match = document.cookie.match(new RegExp('(^| )Device-Fingerprint=([^;]+)'));
+  if (match) {
+    const existingHash = match[2];
+    // Extend TTL to 4 hours
+    document.cookie = `Device-Fingerprint=${existingHash}; path=/; max-age=${4 * 60 * 60}`;
+    return { hash: existingHash, signals: { reused: true } };
+  }
+
   const canvasHash = getCanvasHash();
   const webGLHash = getWebGLHash();
   const audioHash = await getAudioHash();
@@ -160,8 +178,8 @@ export const generateFrontendFingerprint = async (): Promise<{ hash: string, sig
   const rawString = JSON.stringify(signals);
   const hash = await hashString(rawString);
 
-  // Store in cookie for session management
-  document.cookie = `Device-Fingerprint=${hash}; path=/; max-age=${5 * 60 * 60}`; // 5 hours
+  // Store in cookie for session management with 4-hour TTL
+  document.cookie = `Device-Fingerprint=${hash}; path=/; max-age=${4 * 60 * 60}`;
 
   return { hash, signals };
 };

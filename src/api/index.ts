@@ -2,10 +2,16 @@ import { Category, FoodItem, ActiveOrder, Combo } from '../types';
 
 const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
 
-const getHeaders = () => {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
+const getHeaders = (isFormData = false) => {
+  const headers: Record<string, string> = {};
+  
+  if (API_BASE_URL.includes('ngrok')) {
+    headers['ngrok-skip-browser-warning'] = 'true';
+  }
+
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
   const match = document.cookie.match(new RegExp('(^| )Device-Fingerprint=([^;]+)'));
   if (match) {
     headers['X-Device-Fingerprint'] = match[2];
@@ -14,7 +20,7 @@ const getHeaders = () => {
 };
 
 export const fetchCategories = async (): Promise<Category[]> => {
-  const response = await fetch(`${API_BASE_URL}/categories/`);
+  const response = await fetch(`${API_BASE_URL}/categories/`, { headers: getHeaders() });
   if (!response.ok) {
     throw new Error('Failed to fetch categories');
   }
@@ -22,7 +28,7 @@ export const fetchCategories = async (): Promise<Category[]> => {
 };
 
 export const fetchFoodItems = async (): Promise<FoodItem[]> => {
-  const response = await fetch(`${API_BASE_URL}/food-items/`);
+  const response = await fetch(`${API_BASE_URL}/food-items/`, { headers: getHeaders() });
   if (!response.ok) {
     throw new Error('Failed to fetch food items');
   }
@@ -30,7 +36,7 @@ export const fetchFoodItems = async (): Promise<FoodItem[]> => {
 };
 
 export const fetchCombos = async (): Promise<Combo[]> => {
-  const response = await fetch(`${API_BASE_URL}/combos/`);
+  const response = await fetch(`${API_BASE_URL}/combos/`, { headers: getHeaders() });
   if (!response.ok) {
     throw new Error('Failed to fetch combos');
   }
@@ -50,9 +56,21 @@ export const createOrder = async (orderData: Partial<ActiveOrder>): Promise<any>
 };
 
 export const fetchActiveOrders = async (): Promise<ActiveOrder[]> => {
-  const response = await fetch(`${API_BASE_URL}/orders/active/`);
+  const response = await fetch(`${API_BASE_URL}/orders/active/`, { headers: getHeaders() });
   if (!response.ok) {
     throw new Error('Failed to fetch active orders');
+  }
+  const data = await response.json();
+  return data.map((order: any) => ({
+    ...order,
+    placedAt: new Date(order.placedAt),
+  }));
+};
+
+export const fetchMyOrders = async (): Promise<ActiveOrder[]> => {
+  const response = await fetch(`${API_BASE_URL}/orders/my-orders/`, { headers: getHeaders() });
+  if (!response.ok) {
+    throw new Error('Failed to fetch my orders');
   }
   const data = await response.json();
   return data.map((order: any) => ({
@@ -64,6 +82,7 @@ export const fetchActiveOrders = async (): Promise<ActiveOrder[]> => {
 export const markOrderPaid = async (orderId: string): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/orders/${orderId}/paid/`, {
     method: 'PATCH',
+    headers: getHeaders(),
   });
   if (!response.ok) {
     throw new Error('Failed to mark order as paid');
@@ -74,6 +93,7 @@ export const markOrderPaid = async (orderId: string): Promise<any> => {
 export const createCategory = async (formData: FormData): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/categories/`, {
     method: 'POST',
+    headers: getHeaders(true),
     body: formData,
   });
   if (!response.ok) throw new Error('Failed to create category');
@@ -83,13 +103,14 @@ export const createCategory = async (formData: FormData): Promise<any> => {
 export const deleteCategory = async (categoryId: string): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/`, {
     method: 'DELETE',
+    headers: getHeaders(),
   });
   if (!response.ok) throw new Error('Failed to delete category');
   return response;
 };
 
 export const fetchCategoryFoodItems = async (categoryId: string): Promise<any> => {
-  const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/food-items/`);
+  const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/food-items/`, { headers: getHeaders() });
   if (!response.ok) throw new Error('Failed to fetch category food items');
   return response.json();
 };
@@ -97,6 +118,7 @@ export const fetchCategoryFoodItems = async (categoryId: string): Promise<any> =
 export const createFoodItem = async (formData: FormData): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/food-items/`, {
     method: 'POST',
+    headers: getHeaders(true),
     body: formData,
   });
   if (!response.ok) throw new Error('Failed to create food item');
@@ -106,6 +128,7 @@ export const createFoodItem = async (formData: FormData): Promise<any> => {
 export const deleteFoodItem = async (itemId: string): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/food-items/${itemId}/`, {
     method: 'DELETE',
+    headers: getHeaders(),
   });
   if (!response.ok) throw new Error('Failed to delete food item');
   return response;
@@ -114,6 +137,7 @@ export const deleteFoodItem = async (itemId: string): Promise<any> => {
 export const createCombo = async (formData: FormData): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/combos/`, {
     method: 'POST',
+    headers: getHeaders(true),
     body: formData,
   });
   if (!response.ok) throw new Error('Failed to create combo');
@@ -123,13 +147,14 @@ export const createCombo = async (formData: FormData): Promise<any> => {
 export const deleteCombo = async (comboId: string): Promise<any> => {
   const response = await fetch(`${API_BASE_URL}/combos/${comboId}/`, {
     method: 'DELETE',
+    headers: getHeaders(),
   });
   if (!response.ok) throw new Error('Failed to delete combo');
   return response;
 };
 
 export const fetchMetrics = async (): Promise<any> => {
-  const response = await fetch(`${API_BASE_URL}/metrics/`);
+  const response = await fetch(`${API_BASE_URL}/metrics/`, { headers: getHeaders() });
   if (!response.ok) throw new Error('Failed to fetch metrics');
   return response.json();
 };

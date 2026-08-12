@@ -10,7 +10,7 @@ import {
   UserAddress,
   Category,
 } from './types';
-import { fetchCategories, fetchFoodItems, fetchActiveOrders } from './api';
+import { fetchCategories, fetchFoodItems, fetchActiveOrders, fetchMyOrders } from './api';
 import { HERO_DEALS, MOCK_USER } from './data/mockData';
 import { Header } from './components/Header';
 import { FoodDetailModal } from './components/FoodDetailModal';
@@ -72,7 +72,7 @@ export default function App() {
     // Poll orders every 10s so user's screen syncs with admin's actions
     const pollOrders = async () => {
       try {
-        const orders = await fetchActiveOrders();
+        const orders = await fetchMyOrders();
         setActiveOrders(orders);
       } catch (err) {
         console.error("Failed to sync orders");
