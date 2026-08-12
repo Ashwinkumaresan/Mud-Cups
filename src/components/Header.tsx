@@ -8,6 +8,7 @@ interface HeaderProps {
   onOpenAuth: () => void;
   user: UserProfile | null;
   sessionId: string;
+  hasActiveOrders?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,6 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAuth,
   user,
   sessionId,
+  hasActiveOrders,
 }) => {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50 w-full">
@@ -50,7 +52,16 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
           */}
-
+          {hasActiveOrders && (
+            <Link
+              to="/orders"
+              className="flex items-center gap-1.5 text-[#271717] bg-white hover:bg-gray-50 border border-[#b7122a] transition-all font-semibold text-xs md:text-sm cursor-pointer px-3 py-1.5 rounded-xl shadow-xs"
+              title="My Orders"
+            >
+              <span className="material-symbols-outlined text-lg text-[#b7122a]">receipt_long</span>
+              <span className="font-extrabold text-[#b7122a]">Orders</span>
+            </Link>
+          )}
         </div>
       </div>
     </header>

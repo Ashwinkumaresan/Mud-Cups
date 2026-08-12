@@ -14,14 +14,14 @@ export const CategoryList: React.FC<CategoryListProps> = ({
 }) => {
   return (
     <section className="w-full">
-      <div className="flex gap-6 md:gap-8 overflow-x-auto pb-4 carousel-container snap-x items-center">
+      <div className="flex gap-4 md:gap-5 pt-2 overflow-x-auto pb-2 carousel-container snap-x items-center">
         {/* All Categories Pill */}
         <button
           onClick={() => onSelectCategory(null)}
           className="flex flex-col items-center gap-2 min-w-[76px] snap-start group cursor-pointer"
         >
           <div
-            className={`w-[72px] h-[72px] rounded-full flex items-center justify-center transition-all duration-200 shadow-sm ${
+            className={`w-[55px] h-[55px] rounded-full flex items-center justify-center transition-all duration-200 shadow-sm ${
               selectedCategory === null
                 ? 'bg-[#b7122a] text-white ring-4 ring-[#b7122a]/20 scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'

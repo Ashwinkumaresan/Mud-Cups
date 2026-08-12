@@ -50,6 +50,7 @@ export default function App() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOrdersLoading, setIsOrdersLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
@@ -76,6 +77,8 @@ export default function App() {
         setActiveOrders(orders);
       } catch (err) {
         console.error("Failed to sync orders");
+      } finally {
+        setIsOrdersLoading(false);
       }
     };
     
@@ -343,6 +346,7 @@ export default function App() {
           onOpenAuth={() => setIsAuthModalOpen(true)}
           user={user}
           sessionId={sessionId}
+          hasActiveOrders={activeOrders.length > 0}
         />
       )}
 
@@ -387,6 +391,7 @@ export default function App() {
             <Route path="/orders" element={
               <OrdersPage
                 activeOrders={activeOrders}
+                isLoading={isOrdersLoading}
               />
             } />
           </Routes>

@@ -4,15 +4,16 @@ import { ActiveOrder } from '../../types';
 
 interface OrdersPageProps {
   activeOrders: ActiveOrder[];
+  isLoading?: boolean;
 }
 
-export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders }) => {
+export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading }) => {
   const navigate = useNavigate();
 
   return (
     <div className="max-w-3xl mx-auto w-full pb-12 animate-fadeIn space-y-6">
       <div className="flex items-center gap-3 mb-6">
-        <button 
+        <button
           onClick={() => navigate('/')}
           className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors"
         >
@@ -21,7 +22,11 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders }) => {
         <h1 className="text-2xl font-extrabold text-[#271717]">My Orders</h1>
       </div>
 
-      {activeOrders.length === 0 ? (
+      {isLoading ? (
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b7122a]"></div>
+        </div>
+      ) : activeOrders.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4 min-h-[50vh]">
           <div className="w-24 h-24 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 shadow-sm">
             <span className="material-symbols-outlined text-5xl">receipt_long</span>
@@ -50,7 +55,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders }) => {
                     </span>
                   </div>
                   <span className="text-sm text-gray-500">
-                    {order.placedAt.toLocaleDateString()} at {order.placedAt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    {order.placedAt.toLocaleDateString()} at {order.placedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
                 <div className="text-right">

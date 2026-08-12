@@ -66,7 +66,7 @@ export const Home: React.FC<HomeProps> = ({
       />
 
       {/* Search & Filters */}
-      <div className="flex flex-row items-center gap-3 max-w-3xl mx-auto w-full px-4">
+      <div className="flex flex-row items-center gap-3  mx-auto w-full sticky top-16 bg-white/10 backdrop-blur-sm py-2 z-10">
         {/* Search Bar */}
         <div className="flex flex-1 w-full relative">
           <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#6B6B6B] pointer-events-none text-xl">

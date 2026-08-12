@@ -32,7 +32,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
   }
 
   return (
-    <article className="bg-white rounded-xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 hover:-translate-y-1 group border border-gray-100 relative flex flex-col h-full">
+    <article className="bg-white shadow-sm rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group border border-gray-100 relative flex flex-col h-full">
       {/* Image & Badges Container */}
       <div
         onClick={() => onOpenDetail(item)}
@@ -59,8 +59,8 @@ export const FoodCard: React.FC<FoodCardProps> = ({
       </div>
 
       {/* Content Container */}
-      <div className="p-4 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-1 gap-2">
+      <div className="pt-1 pl-3 flex flex-col flex-grow">
+        <div className="flex justify-between items-start">
           <h3
             onClick={() => onOpenDetail(item)}
             className="font-bold text-base text-[#1C1C1C] line-clamp-1 group-hover:text-[#b7122a] transition-colors cursor-pointer"
@@ -70,14 +70,14 @@ export const FoodCard: React.FC<FoodCardProps> = ({
 
         </div>
 
-        <p className="text-xs text-[#6B6B6B] line-clamp-1 mb-2 font-medium">
+        <p className="text-xs text-[#6B6B6B] line-clamp-1 mb-1 font-medium">
           {subtitle}
         </p>
 
 
 
         {/* Footer Price & Add Button */}
-        <div className="mt-auto flex items-center justify-between pt-3 border-t border-gray-100">
+        <div className="mt-auto flex items-center justify-between border-t border-gray-100 p-3">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <span className="text-base font-extrabold text-[#1C1C1C]">

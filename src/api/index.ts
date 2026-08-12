@@ -1,6 +1,7 @@
 import { Category, FoodItem, ActiveOrder, Combo } from '../types';
 
-const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
+// const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
+const API_BASE_URL = 'https://subdued-periscope-canopy.ngrok-free.dev/api';
 
 const getHeaders = (isFormData = false) => {
   const headers: Record<string, string> = {};
