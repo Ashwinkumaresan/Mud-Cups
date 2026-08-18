@@ -175,13 +175,13 @@ export const AdminAddCombo: React.FC = () => {
               placeholder="Search combos..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
             />
           </div>
 
           <button 
             onClick={handleOpenModal}
-            className="flex items-center justify-center gap-2 bg-[#b7122a] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#900e20] transition-colors whitespace-nowrap w-full sm:w-auto"
+            className="flex items-center justify-center gap-2 bg-[#1B4D3E] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#123329] transition-colors whitespace-nowrap w-full sm:w-auto"
           >
             <span className="material-symbols-outlined">add</span>
             Add Combo
@@ -191,7 +191,7 @@ export const AdminAddCombo: React.FC = () => {
 
       {loading ? (
         <div className="flex justify-center p-12">
-          <div className="w-8 h-8 border-4 border-[#b7122a] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-[#1B4D3E] border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -208,13 +208,13 @@ export const AdminAddCombo: React.FC = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className={`material-symbols-outlined text-[14px] shrink-0 ${combo.isVeg ? 'text-green-600' : 'text-red-600'}`}>
+                  <span className={`material-symbols-outlined text-[14px] shrink-0 ${combo.isVeg ? 'text-[#1B4D3E]' : 'text-red-600'}`}>
                     {combo.isVeg ? 'eco' : 'restaurant'}
                   </span>
                   <h3 className="font-bold text-[#271717] truncate">{combo.name}</h3>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-[#b7122a]">₹{combo.price}</span>
+                  <span className="font-bold text-[#1B4D3E]">₹{combo.price}</span>
                   {combo.originalPrice && (
                     <span className="text-xs text-gray-400 line-through">₹{combo.originalPrice}</span>
                   )}
@@ -256,7 +256,7 @@ export const AdminAddCombo: React.FC = () => {
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
                     placeholder="e.g., Breakfast Special"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -270,7 +270,7 @@ export const AdminAddCombo: React.FC = () => {
                       type="number"
                       step="0.01"
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
                       placeholder="0.00"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
@@ -295,18 +295,18 @@ export const AdminAddCombo: React.FC = () => {
                         placeholder="Search items..."
                         value={itemSearchQuery}
                         onChange={(e) => setItemSearchQuery(e.target.value)}
-                        className="pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none w-48"
+                        className="pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none w-48"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-xl border border-gray-200">
                     {filteredModalFoodItems.map(item => (
-                      <label key={item.id} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-100 cursor-pointer hover:border-[#b7122a] transition-colors shadow-sm">
+                      <label key={item.id} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-100 cursor-pointer hover:border-[#1B4D3E] transition-colors shadow-sm">
                         <input
                           type="checkbox"
                           checked={selectedItems.includes(item.id)}
                           onChange={() => toggleItem(item.id)}
-                          className="w-5 h-5 text-[#b7122a] rounded focus:ring-[#b7122a]"
+                          className="w-5 h-5 text-[#1B4D3E] rounded focus:ring-[#1B4D3E]"
                         />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold text-gray-900 truncate">{item.name}</p>
@@ -367,7 +367,7 @@ export const AdminAddCombo: React.FC = () => {
                 type="submit"
                 form="add-combo-form"
                 disabled={isSubmitting}
-                className="flex-1 py-3 rounded-xl font-bold text-white bg-[#b7122a] hover:bg-[#900e20] transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-3 rounded-xl font-bold text-white bg-[#1B4D3E] hover:bg-[#123329] transition-colors flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

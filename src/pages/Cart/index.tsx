@@ -6,6 +6,7 @@ import { createOrder } from '../../api';
 import { CheckoutFlowModal } from '../../components/CheckoutFlowModal';
 
 interface CartPageProps {
+  user: any;
   cartItems: CartItem[];
   onUpdateCartQuantity: (index: number, delta: number) => void;
   onRemoveCartItem: (index: number) => void;
@@ -13,6 +14,7 @@ interface CartPageProps {
 }
 
 export const CartPage: React.FC<CartPageProps> = ({
+  user,
   cartItems,
   onUpdateCartQuantity,
   onRemoveCartItem,
@@ -22,14 +24,15 @@ export const CartPage: React.FC<CartPageProps> = ({
   const location = useLocation();
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
-  const [orderName, setOrderName] = useState(location.state?.customerName || '');
+  const [orderName, setOrderName] = useState(location.state?.customerName || user?.name || '');
   const [tableNumber, setTableNumber] = useState(location.state?.tableNumber || '');
 
   // Listen for state changes if the modal navigates to /cart again
   React.useEffect(() => {
     if (location.state?.customerName) setOrderName(location.state.customerName);
+    else if (user?.name) setOrderName(user.name);
     if (location.state?.tableNumber) setTableNumber(location.state.tableNumber);
-  }, [location.state]);
+  }, [location.state, user]);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
   const grandTotal = subtotal;
@@ -73,7 +76,7 @@ export const CartPage: React.FC<CartPageProps> = ({
         <div className="flex gap-4 mt-6">
           <button
             onClick={() => navigate('/orders')}
-            className="bg-[#b7122a] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#92001c] transition-all shadow-sm"
+            className="bg-[#1B4D3E] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#123329] transition-all shadow-sm"
           >
             View My Orders
           </button>
@@ -85,7 +88,7 @@ export const CartPage: React.FC<CartPageProps> = ({
   if (cartItems.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4 min-h-[60vh] animate-fadeIn">
-        <div className="w-24 h-24 rounded-full bg-gray-50 flex items-center justify-center text-[#b7122a] shadow-sm">
+        <div className="w-24 h-24 rounded-full bg-gray-50 flex items-center justify-center text-[#1B4D3E] shadow-sm">
           <span className="material-symbols-outlined text-5xl">remove_shopping_cart</span>
         </div>
         <h3 className="text-xl font-bold text-gray-800">Your cart is empty</h3>
@@ -94,7 +97,7 @@ export const CartPage: React.FC<CartPageProps> = ({
         </p>
         <button
           onClick={() => navigate('/')}
-          className="mt-4 bg-[#b7122a] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#92001c] transition-all shadow-sm flex items-center gap-2"
+          className="mt-4 bg-[#1B4D3E] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#123329] transition-all shadow-sm flex items-center gap-2"
         >
           <span className="material-symbols-outlined text-lg">restaurant_menu</span>
           Browse Menu
@@ -116,7 +119,7 @@ export const CartPage: React.FC<CartPageProps> = ({
           </button>
           <h1 className="text-2xl font-extrabold text-[#271717]">Your Cart</h1>
         </div>
-        <span className="bg-[#b7122a]/10 text-[#b7122a] px-3 py-1 rounded-lg font-bold text-sm">
+        <span className="bg-[#1B4D3E]/10 text-[#1B4D3E] px-3 py-1 rounded-lg font-bold text-sm">
           {cartItems.length} Item{cartItems.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -127,14 +130,14 @@ export const CartPage: React.FC<CartPageProps> = ({
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-100">
               <h2 className="font-bold text-gray-800 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#b7122a]">person</span>
+                <span className="material-symbols-outlined text-[#1B4D3E]">person</span>
                 Your Details
               </h2>
             </div>
             <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="orderName" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Name <span className="text-[#b7122a]">*</span>
+                  Name <span className="text-[#1B4D3E]">*</span>
                 </label>
                 <input 
                   type="text" 
@@ -142,7 +145,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                   value={orderName}
                   onChange={(e) => setOrderName(e.target.value)}
                   placeholder="Enter your name" 
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#b7122a]/20 focus:border-[#b7122a] transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]/20 focus:border-[#1B4D3E] transition-all"
                   required
                 />
               </div>
@@ -152,17 +155,17 @@ export const CartPage: React.FC<CartPageProps> = ({
                 </label>
                 <div 
                   onClick={() => setIsCheckoutModalOpen(true)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-between cursor-pointer hover:border-[#b7122a] hover:bg-red-50 transition-all group"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-between cursor-pointer hover:border-[#1B4D3E] hover:bg-red-50 transition-all group"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-gray-400 group-hover:text-[#b7122a] transition-colors">
+                    <span className="material-symbols-outlined text-gray-400 group-hover:text-[#1B4D3E] transition-colors">
                       {tableNumber === 'Takeaway' ? 'takeout_dining' : 'restaurant'}
                     </span>
                     <span className="font-bold text-gray-800">
                       {tableNumber === 'Takeaway' ? 'Takeaway' : tableNumber ? `Table ${tableNumber}` : 'Select Preference'}
                     </span>
                   </div>
-                  <span className="text-[#b7122a] text-sm font-bold bg-[#b7122a]/10 px-3 py-1 rounded-lg group-hover:bg-[#b7122a] group-hover:text-white transition-colors">
+                  <span className="text-[#1B4D3E] text-sm font-bold bg-[#1B4D3E]/10 px-3 py-1 rounded-lg group-hover:bg-[#1B4D3E] group-hover:text-white transition-colors">
                     Change
                   </span>
                 </div>
@@ -174,7 +177,7 @@ export const CartPage: React.FC<CartPageProps> = ({
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-100">
               <h2 className="font-bold text-gray-800 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#b7122a]">restaurant</span>
+                <span className="material-symbols-outlined text-[#1B4D3E]">restaurant</span>
                 Order Details
               </h2>
             </div>
@@ -200,18 +203,18 @@ export const CartPage: React.FC<CartPageProps> = ({
                     </div>
 
                     <div className="flex items-center justify-between mt-2">
-                      <span className="font-extrabold text-[#b7122a]">₹{cartItem.totalPrice.toFixed(2)}</span>
+                      <span className="font-extrabold text-[#1B4D3E]">₹{cartItem.totalPrice.toFixed(2)}</span>
                       <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-2 py-1 shadow-xs">
                         <button
                           onClick={() => onUpdateCartQuantity(idx, -1)}
-                          className="text-gray-500 hover:text-[#b7122a] transition-colors w-6 h-6 flex items-center justify-center font-bold"
+                          className="text-gray-500 hover:text-[#1B4D3E] transition-colors w-6 h-6 flex items-center justify-center font-bold"
                         >
                           -
                         </button>
                         <span className="font-bold text-sm w-4 text-center">{cartItem.quantity}</span>
                         <button
                           onClick={() => onUpdateCartQuantity(idx, 1)}
-                          className="text-gray-500 hover:text-[#b7122a] transition-colors w-6 h-6 flex items-center justify-center font-bold"
+                          className="text-gray-500 hover:text-[#1B4D3E] transition-colors w-6 h-6 flex items-center justify-center font-bold"
                         >
                           +
                         </button>
@@ -229,7 +232,7 @@ export const CartPage: React.FC<CartPageProps> = ({
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-100">
               <h2 className="font-bold text-gray-800 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#b7122a]">receipt_long</span>
+                <span className="material-symbols-outlined text-[#1B4D3E]">receipt_long</span>
                 Bill Details
               </h2>
             </div>
@@ -241,17 +244,26 @@ export const CartPage: React.FC<CartPageProps> = ({
 
               <div className="border-t border-dashed border-gray-300 pt-3 mt-3 flex justify-between items-center">
                 <span className="font-extrabold text-gray-800 text-lg">To Pay</span>
-                <span className="font-extrabold text-xl text-[#b7122a]">₹{grandTotal.toFixed(2)}</span>
+                <span className="font-extrabold text-xl text-[#1B4D3E]">₹{grandTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>
 
-          <SwipeToConfirm 
-            onConfirm={handlePlaceOrder}
-            amount={grandTotal}
-            disabled={!orderName.trim()}
-            disabledMessage="Please enter your name to proceed"
-          />
+          {user ? (
+            <SwipeToConfirm 
+              onConfirm={handlePlaceOrder}
+              amount={grandTotal}
+              disabled={!orderName.trim()}
+              disabledMessage="Please enter your name to proceed"
+            />
+          ) : (
+            <button
+              className="w-full bg-[#1B4D3E] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#123329] transition-colors shadow-sm"
+              onClick={() => navigate('/login?redirect=/cart')}
+            >
+              Login to Checkout
+            </button>
+          )}
         </div>
       </div>
 

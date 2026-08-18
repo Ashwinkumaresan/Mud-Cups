@@ -1,5 +1,5 @@
 import React from 'react';
-import { FoodItem } from '../types';
+import { FoodItem } from '../../types';
 
 interface FoodCardProps {
   item: FoodItem;
@@ -63,7 +63,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
         <div className="flex justify-between items-start">
           <h3
             onClick={() => onOpenDetail(item)}
-            className="font-bold text-base text-[#1C1C1C] line-clamp-1 group-hover:text-[#b7122a] transition-colors cursor-pointer"
+            className="font-bold text-base text-[#1C1C1C] line-clamp-1 group-hover:text-[#1B4D3E] transition-colors cursor-pointer"
           >
             {displayName}
           </h3>
@@ -92,19 +92,19 @@ export const FoodCard: React.FC<FoodCardProps> = ({
           </div>
 
           {cartQuantity > 0 ? (
-            <div className="flex items-center gap-2 bg-white border border-[#b7122a] rounded-lg px-2 py-1">
+            <div className="flex items-center gap-2 bg-white border border-[#1B4D3E] rounded-lg px-2 py-1">
               <button
                 onClick={() => onUpdateQuantity(item, -1)}
-                className="text-[#b7122a] hover:bg-[#b7122a] hover:text-white rounded w-5 h-5 flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                className="text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white rounded w-5 h-5 flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
               >
                 -
               </button>
-              <span className="text-xs font-bold text-[#b7122a] min-w-[14px] text-center">
+              <span className="text-xs font-bold text-[#1B4D3E] min-w-[14px] text-center">
                 {cartQuantity}
               </span>
               <button
                 onClick={() => onUpdateQuantity(item, 1)}
-                className="text-[#b7122a] hover:bg-[#b7122a] hover:text-white rounded w-5 h-5 flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                className="text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white rounded w-5 h-5 flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
               >
                 +
               </button>
@@ -112,7 +112,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
           ) : (
             <button
               onClick={() => onAddToCart(item)}
-              className="border-2 border-[#b7122a] text-[#b7122a] hover:bg-[#b7122a] hover:text-white px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all duration-200 cursor-pointer active:scale-95"
+              className="border-2 border-[#1B4D3E] text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all duration-200 cursor-pointer active:scale-95"
             >
               ADD
             </button>

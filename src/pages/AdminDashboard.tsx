@@ -22,7 +22,7 @@ export const AdminDashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center p-12">
-        <div className="w-8 h-8 border-4 border-[#b7122a] border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-[#1B4D3E] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }

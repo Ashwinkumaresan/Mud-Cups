@@ -74,7 +74,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
   const b = Math.round(42 + (94 - 42) * swipeProgress);
   const bgColor = `rgb(${r}, ${g}, ${b})`;
 
-  const thumbIconColor = swipeProgress >= 1 ? '#22c55e' : '#b7122a';
+  const thumbIconColor = swipeProgress >= 1 ? '#22c55e' : '#1B4D3E';
 
   return (
     <div className="w-full flex flex-col gap-2 relative">
@@ -87,7 +87,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
             onConfirm();
           }
         }}
-        className={`hidden lg:flex w-full relative overflow-hidden bg-[#b7122a] hover:bg-[#92001c] active:scale-95 cursor-pointer text-white py-4 rounded-xl font-bold transition-all shadow-sm items-center justify-between px-6`}
+        className={`hidden lg:flex w-full relative overflow-hidden bg-[#1B4D3E] hover:bg-[#123329] active:scale-95 cursor-pointer text-white py-4 rounded-xl font-bold transition-all shadow-sm items-center justify-between px-6`}
       >
         <span className="flex items-center gap-2">
           Place Order

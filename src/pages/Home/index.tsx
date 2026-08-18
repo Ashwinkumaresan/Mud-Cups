@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { FilterState, FoodItem, HeroDeal } from '../../types';
-import { HeroCarousel } from '../../components/HeroCarousel';
-import { CategoryList } from '../../components/CategoryList';
-import { FoodCard } from '../../components/FoodCard';
-import { HERO_DEALS } from '../../data/mockData';
-import { Category } from '../../types';
+import { FilterState, FoodItem, HeroDeal, Category } from '../../types';
+import { HeroCarousel } from '../../components/Home/HeroCarousel';
+import { CategoryList } from '../../components/Home/CategoryList';
+import { FoodCard } from '../../components/Home/FoodCard';
+import { SearchFilterBar } from '../../components/Home/SearchFilterBar';
+import { OfferGameToggle } from '../../components/Home/OfferGameToggle';
+import { HorizontalScrollList } from '../../components/Home/HorizontalScrollList';
+import { SectionHeader } from '../../components/Home/SectionHeader';
+import { HERO_DEALS, FOOD_ITEMS } from '../../data/mockData';
 
 interface HomeProps {
   categories: Category[];
@@ -37,118 +40,91 @@ export const Home: React.FC<HomeProps> = ({
   handleUpdateQuantitySimple,
   setDetailItem,
 }) => {
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-
-  const popularSearches = [
-    'Truffle Mushroom Pizza',
-    'Butter Chicken',
-    'Burgers',
-    'Sushi',
-    'Veg Dishes',
-    'Drinks',
-  ];
-
-  const handleSelectSuggestion = (suggestion: string) => {
-    handleUpdateFilters({ searchQuery: suggestion });
-    setIsSearchFocused(false);
-  };
+  const combos = FOOD_ITEMS.filter((item) => item.category === 'Combos');
+  const offers = FOOD_ITEMS.filter((item) => item.category === 'Offers');
 
   return (
-    <div className="space-y-2 animate-fadeIn">
-      {/* Hero Carousel */}
-      <HeroCarousel deals={HERO_DEALS} onOrderDeal={handleOrderDeal} />
+    <div className="flex flex-col bg-white min-h-screen pb-24">
 
-      {/* Categories Carousel */}
-      <CategoryList
-        categories={categories}
-        selectedCategory={filters.selectedCategory}
-        onSelectCategory={(cat) => handleUpdateFilters({ selectedCategory: cat })}
-      />
+      <div>
+        {/* Hero Carousel */}
+        <HeroCarousel deals={HERO_DEALS} onOrderDeal={handleOrderDeal} />
+      </div>
+
+      {/* Offer/Game Toggle Layout */}
+      <OfferGameToggle />
+
+      {/* Combos Section */}
+      <div className="pt-2">
+        <SectionHeader title="Combos You Need to Try" />
+        <HorizontalScrollList>
+          {combos.map((combo) => (
+            <div key={combo.id} className="w-[calc(100vw-32px)] sm:w-[300px] shrink-0">
+              <FoodCard
+                item={combo}
+                isFavorite={favorites.includes(combo.id)}
+                onToggleFavorite={handleToggleFavorite}
+                cartQuantity={getCartQuantity(combo)}
+                onAddToCart={handleAddToCartSimple}
+                onUpdateQuantity={handleUpdateQuantitySimple}
+                onOpenDetail={(i) => setDetailItem(i)}
+              />
+            </div>
+          ))}
+        </HorizontalScrollList>
+      </div>
+
+      {/* Offers Section */}
+      <div className="pt-2">
+        <SectionHeader title="Discover Your Best Offers" />
+        <HorizontalScrollList>
+          {offers.map((offer) => (
+            <div key={offer.id} className="w-[calc(100vw-32px)] sm:w-[300px] shrink-0">
+              <FoodCard
+                item={offer}
+                isFavorite={favorites.includes(offer.id)}
+                onToggleFavorite={handleToggleFavorite}
+                cartQuantity={getCartQuantity(offer)}
+                onAddToCart={handleAddToCartSimple}
+                onUpdateQuantity={handleUpdateQuantitySimple}
+                onOpenDetail={(i) => setDetailItem(i)}
+              />
+            </div>
+          ))}
+        </HorizontalScrollList>
+      </div>
+
+      {/* Explore Menu Section */}
+      <div className="pt-2 bg-white">
+        <SectionHeader title="Explore Our Variety" />
+      </div>
+      <div className="px-4 sticky top-[36px] bg-white z-30 pb-2">
+        <CategoryList
+          categories={categories}
+          selectedCategory={filters.selectedCategory}
+          onSelectCategory={(cat) => handleUpdateFilters({ selectedCategory: cat })}
+        />
+      </div>
 
       {/* Search & Filters */}
-      <div className="flex flex-row items-center gap-3  mx-auto w-full sticky top-16 bg-white/10 backdrop-blur-sm py-2 z-10">
-        {/* Search Bar */}
-        <div className="flex flex-1 w-full relative">
-          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#6B6B6B] pointer-events-none text-xl">
-            search
-          </span>
-          <input
-            type="text"
-            value={filters.searchQuery}
-            onChange={(e) => handleUpdateFilters({ searchQuery: e.target.value })}
-            onFocus={() => setIsSearchFocused(true)}
-            onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-            placeholder="Search for food, cuisines or restaurants..."
-            className="w-full bg-white shadow-sm text-[#1C1C1C] placeholder-[#6B6B6B] border border-gray-200 rounded-xl pl-12 pr-10 py-3 focus:outline-none focus:border-[#b7122a] focus:ring-2 focus:ring-[#b7122a]/20 transition-all"
-          />
-          {filters.searchQuery && (
-            <button
-              onClick={() => handleUpdateFilters({ searchQuery: '' })}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs rounded-full p-1 cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-base">close</span>
-            </button>
-          )}
-
-          {/* Autocomplete Suggestions Overlay */}
-          {isSearchFocused && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 py-3 px-2 z-50">
-              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 pb-2">
-                Popular Searches
-              </div>
-              <div className="flex flex-col gap-1">
-                {popularSearches
-                  .filter((s) => s.toLowerCase().includes(filters.searchQuery.toLowerCase()))
-                  .map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      onMouseDown={() => handleSelectSuggestion(suggestion)}
-                      className="flex items-center gap-2 text-left px-3 py-2 text-sm text-[#1C1C1C] hover:bg-gray-50 hover:text-[#b7122a] rounded-lg transition-colors cursor-pointer"
-                    >
-                      <span className="material-symbols-outlined text-gray-400 text-base">
-                        trending_up
-                      </span>
-                      <span>{suggestion}</span>
-                    </button>
-                  ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Veg Only Checkbox Label */}
-        <label className={`flex items-center justify-center gap-1.5 cursor-pointer border px-4 py-3 rounded-xl shadow-sm transition-all text-sm font-semibold shrink-0 w-auto ${
-          filters.vegOnly
-            ? 'bg-[#48A860]/10 border-[#48A860] text-[#48A860]'
-            : 'bg-white border-gray-200 text-[#1C1C1C] hover:bg-gray-50'
-        }`}>
-          <input
-            type="checkbox"
-            checked={filters.vegOnly}
-            onChange={(e) => handleUpdateFilters({ vegOnly: e.target.checked })}
-            className="hidden"
-          />
-          <span className="material-symbols-outlined text-[#48A860] text-[18px]">
-            {filters.vegOnly ? 'check_box' : 'eco'}
-          </span>
-          <span>Veg</span>
-        </label>
+      <div className="pt-2">
+        <SearchFilterBar filters={filters} handleUpdateFilters={handleUpdateFilters} />
       </div>
 
       {/* Food Grid Section */}
-      <section className="space-y-4">
+      <section className="pt-2 px-4">
         {filteredFoodItems.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-gray-100 space-y-3">
+          <div className="bg-[#F5F1E8] rounded-[16px] p-12 text-center border border-[#1B4D3E]/10 space-y-3">
             <span className="material-symbols-outlined text-4xl text-gray-400">
               no_food
             </span>
-            <h3 className="text-lg font-bold text-gray-800">No dishes found</h3>
+            <h3 className="text-lg font-bold text-[#1B4D3E]">No dishes found</h3>
             <p className="text-xs text-gray-500 max-w-sm mx-auto">
               Try clearing or adjusting your search filters to view available options.
             </p>
             <button
               onClick={handleResetFilters}
-              className="bg-[#b7122a] text-white text-xs font-bold px-4 py-2 rounded-xl cursor-pointer"
+              className="bg-[#1B4D3E] text-white text-xs font-bold px-6 py-2.5 rounded-full cursor-pointer shadow-sm"
             >
               Reset All Filters
             </button>

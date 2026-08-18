@@ -24,7 +24,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
 
       {isLoading ? (
         <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b7122a]"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1B4D3E]"></div>
         </div>
       ) : activeOrders.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4 min-h-[50vh]">
@@ -37,7 +37,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
           </p>
           <button
             onClick={() => navigate('/')}
-            className="mt-4 bg-[#b7122a] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#92001c] transition-all shadow-sm"
+            className="mt-4 bg-[#1B4D3E] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#123329] transition-all shadow-sm"
           >
             Browse Menu
           </button>
@@ -59,7 +59,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
                   </span>
                 </div>
                 <div className="text-right">
-                  <div className="font-extrabold text-[#b7122a] text-lg">₹{order.finalAmount.toFixed(2)}</div>
+                  <div className="font-extrabold text-[#1B4D3E] text-lg">₹{order.finalAmount.toFixed(2)}</div>
                   <span className="text-xs text-gray-500">{order.items.length} items</span>
                 </div>
               </div>
@@ -77,7 +77,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
                       <div className="flex-1">
                         <div className="flex justify-between">
                           <span className="font-semibold text-[#271717] text-sm line-clamp-1">{cartItem.item.name}</span>
-                          <span className="font-bold text-[#b7122a] text-sm">₹{cartItem.totalPrice.toFixed(2)}</span>
+                          <span className="font-bold text-[#1B4D3E] text-sm">₹{cartItem.totalPrice.toFixed(2)}</span>
                         </div>
                         <div className="text-xs text-gray-500">
                           Qty: {cartItem.quantity}
@@ -97,7 +97,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
                   </div>
                   <div className="flex justify-between font-bold text-gray-800 pt-2 border-t border-dashed border-gray-200 mt-1">
                     <span>Total Paid</span>
-                    <span className="text-[#b7122a]">₹{order.finalAmount.toFixed(2)}</span>
+                    <span className="text-[#1B4D3E]">₹{order.finalAmount.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

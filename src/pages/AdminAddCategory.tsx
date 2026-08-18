@@ -125,12 +125,12 @@ export const AdminAddCategory: React.FC = () => {
               placeholder="Search categories..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
             />
           </div>
           <button 
             onClick={handleOpenModal}
-            className="flex items-center gap-2 bg-[#b7122a] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#900e20] transition-colors whitespace-nowrap"
+            className="flex items-center gap-2 bg-[#1B4D3E] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#123329] transition-colors whitespace-nowrap"
           >
             <span className="material-symbols-outlined">add</span>
             Add Category
@@ -140,12 +140,12 @@ export const AdminAddCategory: React.FC = () => {
 
       {loading ? (
         <div className="flex justify-center p-12">
-          <div className="w-8 h-8 border-4 border-[#b7122a] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-[#1B4D3E] border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
           {filteredCategories.map(category => (
-            <div key={category.id} className={`bg-white rounded-2xl shadow-sm border ${expandedCategory === category.id ? 'border-[#b7122a]' : 'border-gray-100'} overflow-hidden transition-colors`}>
+            <div key={category.id} className={`bg-white rounded-2xl shadow-sm border ${expandedCategory === category.id ? 'border-[#1B4D3E]' : 'border-gray-100'} overflow-hidden transition-colors`}>
               <div 
                 className="p-4 flex items-center gap-4 group cursor-pointer hover:bg-gray-50"
                 onClick={() => handleToggleExpand(category.id)}
@@ -187,7 +187,7 @@ export const AdminAddCategory: React.FC = () => {
                 <div className="bg-gray-50 p-4 border-t border-gray-100">
                   {loadingItems ? (
                     <div className="flex justify-center p-6">
-                      <div className="w-6 h-6 border-2 border-[#b7122a] border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-6 h-6 border-2 border-[#1B4D3E] border-t-transparent rounded-full animate-spin"></div>
                     </div>
                   ) : categoryItems.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -202,10 +202,10 @@ export const AdminAddCategory: React.FC = () => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-semibold text-gray-900 truncate text-sm">{item.name}</p>
-                            <p className="text-xs font-bold text-[#b7122a]">₹{item.price}</p>
+                            <p className="text-xs font-bold text-[#1B4D3E]">₹{item.price}</p>
                           </div>
                           <div className="shrink-0">
-                            <span className={`material-symbols-outlined text-sm ${item.isVeg ? 'text-green-600' : 'text-red-600'}`}>
+                            <span className={`material-symbols-outlined text-sm ${item.isVeg ? 'text-[#1B4D3E]' : 'text-red-600'}`}>
                               {item.isVeg ? 'eco' : 'restaurant'}
                             </span>
                           </div>
@@ -247,7 +247,7 @@ export const AdminAddCategory: React.FC = () => {
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
                   placeholder="e.g., Hot Beverages"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -285,7 +285,7 @@ export const AdminAddCategory: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-3 rounded-xl font-semibold text-white bg-[#b7122a] hover:bg-[#900e20] transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 py-3 rounded-xl font-semibold text-white bg-[#1B4D3E] hover:bg-[#123329] transition-colors flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

@@ -74,7 +74,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
           <div className="flex justify-between items-start gap-4">
             <h2 className="text-xl font-extrabold">{displayName}</h2>
             <div className="text-right shrink-0">
-              <span className="font-extrabold text-xl text-[#b7122a]">
+              <span className="font-extrabold text-xl text-[#1B4D3E]">
                 ₹{item.price.toFixed(2)}
               </span>
               {item.originalPrice && (
@@ -107,7 +107,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
 
           <button
             onClick={handleAddToCart}
-            className="flex-1 bg-[#b7122a] text-white py-3.5 px-6 rounded-2xl font-bold shadow-sm hover:bg-[#92001c] transition-colors flex justify-between items-center"
+            className="flex-1 bg-[#1B4D3E] text-white py-3.5 px-6 rounded-2xl font-bold shadow-sm hover:bg-[#123329] transition-colors flex justify-between items-center"
           >
             <span>Add to Cart</span>
             <span>₹{totalPrice.toFixed(2)}</span>

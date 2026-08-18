@@ -66,8 +66,8 @@ export const AdminOrdersPage: React.FC = () => {
         </div>
         <div className="bg-white px-4 py-2 rounded-xl border border-gray-200 shadow-sm flex items-center gap-3">
           <div className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#b7122a] opacity-40"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#b7122a]"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1B4D3E] opacity-40"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#1B4D3E]"></span>
           </div>
           <span className="font-bold text-[#271717]">
             {orders.length} {orders.length === 1 ? 'Order' : 'Orders'} Pending
@@ -78,7 +78,7 @@ export const AdminOrdersPage: React.FC = () => {
       {/* Content */}
       {loading ? (
         <div className="flex justify-center p-12">
-          <div className="w-8 h-8 border-4 border-[#b7122a] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-[#1B4D3E] border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : orders.length === 0 ? (
         <div className="flex flex-col items-center justify-center p-12 text-center space-y-4 bg-white rounded-2xl shadow-sm border border-gray-100 min-h-[40vh]">
@@ -132,7 +132,7 @@ export const AdminOrdersPage: React.FC = () => {
                     {order.items.map((cartItem, i) => (
                       <div key={i} className="flex justify-between items-start">
                         <div className="flex gap-3">
-                          <span className="font-bold text-[#b7122a] text-sm">{cartItem.quantity}x</span>
+                          <span className="font-bold text-[#1B4D3E] text-sm">{cartItem.quantity}x</span>
                           <span className="font-bold text-[#271717] text-sm leading-tight">{cartItem.item.name}</span>
                         </div>
                         <span className="font-bold text-gray-500 text-sm">₹{cartItem.totalPrice.toFixed(2)}</span>
@@ -145,11 +145,11 @@ export const AdminOrdersPage: React.FC = () => {
                 <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-0.5">Total</p>
-                    <p className="text-lg font-black text-[#b7122a]">₹{order.finalAmount.toFixed(2)}</p>
+                    <p className="text-lg font-black text-[#1B4D3E]">₹{order.finalAmount.toFixed(2)}</p>
                   </div>
                   <button
                     onClick={() => handleMarkPaid(order.orderId)}
-                    className="bg-[#b7122a] hover:bg-[#9a0f23] text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2 active:scale-95"
+                    className="bg-[#1B4D3E] hover:bg-[#123329] text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-2 active:scale-95"
                   >
                     <span className="material-symbols-outlined text-[18px]">done_all</span>
                     Complete

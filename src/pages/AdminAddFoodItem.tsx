@@ -154,13 +154,13 @@ export const AdminAddFoodItem: React.FC = () => {
               placeholder="Search items..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
             />
           </div>
 
           <button 
             onClick={handleOpenModal}
-            className="flex items-center justify-center gap-2 bg-[#b7122a] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#900e20] transition-colors whitespace-nowrap w-full sm:w-auto"
+            className="flex items-center justify-center gap-2 bg-[#1B4D3E] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#123329] transition-colors whitespace-nowrap w-full sm:w-auto"
           >
             <span className="material-symbols-outlined">add</span>
             Add Item
@@ -170,7 +170,7 @@ export const AdminAddFoodItem: React.FC = () => {
 
       {loading ? (
         <div className="flex justify-center p-12">
-          <div className="w-8 h-8 border-4 border-[#b7122a] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-[#1B4D3E] border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -187,14 +187,14 @@ export const AdminAddFoodItem: React.FC = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className={`material-symbols-outlined text-[14px] shrink-0 ${item.isVeg ? 'text-green-600' : 'text-red-600'}`}>
+                  <span className={`material-symbols-outlined text-[14px] shrink-0 ${item.isVeg ? 'text-[#1B4D3E]' : 'text-red-600'}`}>
                     {item.isVeg ? 'eco' : 'restaurant'}
                   </span>
                   <h3 className="font-bold text-[#271717] truncate">{item.name}</h3>
                 </div>
                 <p className="text-xs text-gray-500 truncate mb-1">{item.category}</p>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-[#b7122a]">₹{item.price}</span>
+                  <span className="font-bold text-[#1B4D3E]">₹{item.price}</span>
                   {item.originalPrice && (
                     <span className="text-xs text-gray-400 line-through">₹{item.originalPrice}</span>
                   )}
@@ -237,7 +237,7 @@ export const AdminAddFoodItem: React.FC = () => {
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
                       placeholder="e.g., Filter Coffee"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -248,7 +248,7 @@ export const AdminAddFoodItem: React.FC = () => {
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category *</label>
                     <select
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all bg-white appearance-none"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all bg-white appearance-none"
                       value={formData.categoryId}
                       onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                       style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236B7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.2em' }}
@@ -268,7 +268,7 @@ export const AdminAddFoodItem: React.FC = () => {
                       type="number"
                       step="0.01"
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#b7122a] focus:border-transparent outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
                       placeholder="0.00"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
@@ -338,7 +338,7 @@ export const AdminAddFoodItem: React.FC = () => {
                 type="submit"
                 form="add-food-item-form"
                 disabled={isSubmitting}
-                className="flex-1 py-3 rounded-xl font-bold text-white bg-[#b7122a] hover:bg-[#900e20] transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-3 rounded-xl font-bold text-white bg-[#1B4D3E] hover:bg-[#123329] transition-colors flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

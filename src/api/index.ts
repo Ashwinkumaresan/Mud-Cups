@@ -1,7 +1,7 @@
 import { Category, FoodItem, ActiveOrder, Combo } from '../types';
-
-const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
-// const API_BASE_URL = 'https://subdued-periscope-canopy.ngrok-free.dev/api';
+import { getCookie } from '../utils/cookies';
+// const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
+const API_BASE_URL = 'https://subdued-periscope-canopy.ngrok-free.dev/api';
 
 const getHeaders = (isFormData = false) => {
   const headers: Record<string, string> = {};
@@ -13,10 +13,12 @@ const getHeaders = (isFormData = false) => {
   if (!isFormData) {
     headers['Content-Type'] = 'application/json';
   }
-  const match = document.cookie.match(new RegExp('(^| )Device-Fingerprint=([^;]+)'));
-  if (match) {
-    headers['X-Device-Fingerprint'] = match[2];
+  
+  const token = getCookie('mudcups_token');
+  if (token) {
+    headers['Authorization'] = `Token ${token}`;
   }
+  
   return headers;
 };
 
@@ -154,8 +156,45 @@ export const deleteCombo = async (comboId: string): Promise<any> => {
   return response;
 };
 
-export const fetchMetrics = async (): Promise<any> => {
+export const fetchMetrics = async () => {
   const response = await fetch(`${API_BASE_URL}/metrics/`, { headers: getHeaders() });
-  if (!response.ok) throw new Error('Failed to fetch metrics');
+  if (!response.ok) {
+    throw new Error('Failed to fetch metrics');
+  }
+  return response.json();
+};
+
+// Auth
+export const signupUser = async (data: any) => {
+  const response = await fetch(`${API_BASE_URL}/auth/signup/`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to signup');
+  }
+  return response.json();
+};
+
+export const loginUser = async (data: any) => {
+  const response = await fetch(`${API_BASE_URL}/auth/login/`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to login');
+  }
+  return response.json();
+};
+
+export const fetchMe = async () => {
+  const response = await fetch(`${API_BASE_URL}/auth/me/`, { headers: getHeaders() });
+  if (!response.ok) {
+    throw new Error('Failed to fetch user');
+  }
   return response.json();
 };

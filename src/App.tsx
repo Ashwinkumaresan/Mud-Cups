@@ -14,12 +14,15 @@ import { fetchCategories, fetchFoodItems, fetchActiveOrders, fetchMyOrders } fro
 import { HERO_DEALS, MOCK_USER } from './data/mockData';
 import { Header } from './components/Header';
 import { FoodDetailModal } from './components/FoodDetailModal';
-import { AuthModal } from './components/AuthModal';
 import { CheckoutFlowModal } from './components/CheckoutFlowModal';
 import { Footer } from './components/Footer';
-import { generateFrontendFingerprint } from './utils/fingerprint';
-
+import { LoginPage } from './pages/Login';
+import { SignupPage } from './pages/Signup';
+import { fetchMe } from './api';
+import { getCookie, setCookie, deleteCookie } from './utils/cookies';
 import { Home } from './pages/Home';
+import { OffersPage } from './pages/Offers';
+import { CombosPage } from './pages/Combos';
 import { CartPage } from './pages/Cart';
 import { OrdersPage } from './pages/Orders';
 import { AdminOrdersPage } from './pages/AdminOrders';
@@ -30,7 +33,7 @@ import { AdminAddFoodItem } from './pages/AdminAddFoodItem';
 import { AdminAddCombo } from './pages/AdminAddCombo';
 export default function App() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<UserProfile | null>(MOCK_USER);
+  const [user, setUser] = useState<any>(null);
   const [favorites, setFavorites] = useState<string[]>(['item-1', 'item-2']);
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('cartItems');
@@ -55,9 +58,16 @@ export default function App() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Generate and store fingerprint first
-        await generateFrontendFingerprint();
-
+        const token = getCookie('mudcups_token');
+        if (token) {
+          try {
+            const userData = await fetchMe();
+            setUser(userData.user);
+          } catch (e) {
+            console.error('Failed to fetch user', e);
+            deleteCookie('mudcups_token');
+          }
+        }
         const [cats, items] = await Promise.all([fetchCategories(), fetchFoodItems()]);
         setCategories(cats);
         setFoodItems(items);
@@ -69,8 +79,9 @@ export default function App() {
       }
     };
     loadData();
+  }, []);
 
-    // Poll orders every 10s so user's screen syncs with admin's actions
+  useEffect(() => {
     const pollOrders = async () => {
       try {
         const orders = await fetchMyOrders();
@@ -82,67 +93,27 @@ export default function App() {
       }
     };
     
-    pollOrders(); // Initial load
-    const interval = setInterval(pollOrders, 10000);
-    return () => clearInterval(interval);
-  }, []);
+    if (user) {
+      pollOrders();
+      const interval = setInterval(pollOrders, 10000);
+      return () => clearInterval(interval);
+    } else {
+      setActiveOrders([]);
+      setIsOrdersLoading(false);
+    }
+  }, [user]);
 
   const [selectedAddress, setSelectedAddress] = useState<UserAddress>(
     MOCK_USER.addresses[0]
   );
 
-  // Session ID state
-  const generateSessionId = () => {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let result = 'SESS-';
-    for (let i = 0; i < 4; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    result += '-';
-    for (let i = 0; i < 4; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  };
+  // Removed Session ID state logic
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 4000);
-  };
-
-  const [sessionId, setSessionId] = useState<string>(() => {
-    // Check URL parameters first for shared session links
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlSession = urlParams.get('session');
-    if (urlSession && urlSession.trim()) {
-      const cleanSession = urlSession.trim();
-      localStorage.setItem('mudcups_session_id', cleanSession);
-      return cleanSession;
-    }
-
-    const saved = localStorage.getItem('mudcups_session_id');
-    if (saved) return saved;
-    const newId = generateSessionId();
-    localStorage.setItem('mudcups_session_id', newId);
-    return newId;
-  });
-
-  const handleNewSession = () => {
-    const newId = generateSessionId();
-    localStorage.setItem('mudcups_session_id', newId);
-    setSessionId(newId);
-    showToast(`Started new session ${newId}`);
-  };
-
-  const handleJoinSession = (newSessionId: string) => {
-    localStorage.setItem('mudcups_session_id', newSessionId);
-    setSessionId(newSessionId);
-    // Update URL query string
-    const newUrl = `${window.location.pathname}?session=${newSessionId}`;
-    window.history.replaceState({}, '', newUrl);
-    showToast(`Successfully joined session ${newSessionId}!`);
   };
 
   // Filters State
@@ -334,7 +305,7 @@ export default function App() {
 
   const location = useLocation();
 
-  const showHeaderFooter = location.pathname !== '/cart' && location.pathname !== '/orders' && !location.pathname.startsWith('/admin');
+  const showHeaderFooter = location.pathname !== '/cart' && location.pathname !== '/orders' && location.pathname !== '/login' && location.pathname !== '/signup' && !location.pathname.startsWith('/admin');
 
   return (
     <div className="min-h-screen text-[#271717] flex flex-col font-sans relative pb-24">
@@ -343,9 +314,9 @@ export default function App() {
         <Header
           cartCount={totalCartCount}
           onOpenCart={() => {}} // deprecated
-          onOpenAuth={() => setIsAuthModalOpen(true)}
+          onOpenAuth={() => navigate('/login')}
           user={user}
-          sessionId={sessionId}
+          sessionId={''}
           hasActiveOrders={activeOrders.length > 0}
         />
       )}
@@ -357,7 +328,7 @@ export default function App() {
             <Route path="/" element={
             isLoading ? (
               <div className="flex items-center justify-center min-h-[50vh]">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#b7122a]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1B4D3E]"></div>
               </div>
             ) : (
             <Home
@@ -377,8 +348,31 @@ export default function App() {
             />
             )
           } />
+          <Route path="/offers" element={
+            <OffersPage
+              foodItems={filteredFoodItems}
+              favorites={favorites}
+              handleToggleFavorite={handleToggleFavorite}
+              getCartQuantity={getCartQuantity}
+              handleAddToCartSimple={handleAddToCartSimple}
+              handleUpdateQuantitySimple={handleUpdateQuantitySimple}
+              setDetailItem={setDetailItem}
+            />
+          } />
+          <Route path="/combos" element={
+            <CombosPage
+              foodItems={filteredFoodItems}
+              favorites={favorites}
+              handleToggleFavorite={handleToggleFavorite}
+              getCartQuantity={getCartQuantity}
+              handleAddToCartSimple={handleAddToCartSimple}
+              handleUpdateQuantitySimple={handleUpdateQuantitySimple}
+              setDetailItem={setDetailItem}
+            />
+          } />
           <Route path="/cart" element={
             <CartPage
+              user={user}
               cartItems={cartItems}
               onUpdateCartQuantity={handleUpdateCartQuantityByIdx}
               onRemoveCartItem={handleRemoveCartItem}
@@ -394,6 +388,28 @@ export default function App() {
                 isLoading={isOrdersLoading}
               />
             } />
+            <Route 
+              path="/login" 
+              element={
+                <LoginPage 
+                  onLogin={(token, user) => {
+                    setCookie('mudcups_token', token);
+                    setUser(user);
+                  }}
+                />
+              } 
+            />
+            <Route 
+              path="/signup" 
+              element={
+                <SignupPage 
+                  onLogin={(token, user) => {
+                    setCookie('mudcups_token', token);
+                    setUser(user);
+                  }}
+                />
+              } 
+            />
           </Routes>
         </main>
       ) : (
@@ -427,8 +443,14 @@ export default function App() {
             </div>
             
             <button 
-              onClick={() => setIsCheckoutModalOpen(true)}
-              className="bg-[#b7122a] text-white px-5 py-2 rounded-xl font-bold hover:bg-[#92001c] active:scale-95 transition-all shadow-sm flex items-center gap-1 cursor-pointer"
+              onClick={() => {
+                if (!user) {
+                  navigate('/login?redirect=cart');
+                } else {
+                  setIsCheckoutModalOpen(true);
+                }
+              }}
+              className="bg-[#1B4D3E] text-white px-5 py-2 rounded-xl font-bold hover:bg-[#123329] active:scale-95 transition-all shadow-sm flex items-center gap-1 cursor-pointer"
             >
               Checkout <span className="material-symbols-outlined text-sm">arrow_forward_ios</span>
             </button>
@@ -444,15 +466,7 @@ export default function App() {
         onAddToCart={handleAddToCart}
       />
 
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        sessionId={sessionId}
-        onNewSession={handleNewSession}
-        onJoinSession={handleJoinSession}
-        user={user}
-        activeOrders={activeOrders}
-      />
+
 
       <CheckoutFlowModal 
         isOpen={isCheckoutModalOpen}
@@ -462,7 +476,7 @@ export default function App() {
       {isClearCartModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-slideUp flex flex-col items-center text-center">
-            <div className="w-12 h-12 bg-red-50 text-[#b7122a] rounded-full flex items-center justify-center mb-4">
+            <div className="w-12 h-12 bg-red-50 text-[#1B4D3E] rounded-full flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-2xl">delete</span>
             </div>
             <h3 className="text-lg font-bold text-gray-900 mb-2">Clear Cart?</h3>
@@ -476,7 +490,7 @@ export default function App() {
               </button>
               <button 
                 onClick={handleClearCart}
-                className="flex-1 bg-[#b7122a] text-white font-semibold py-3 rounded-xl hover:bg-[#92001c] transition-colors shadow-sm cursor-pointer"
+                className="flex-1 bg-[#1B4D3E] text-white font-semibold py-3 rounded-xl hover:bg-[#123329] transition-colors shadow-sm cursor-pointer"
               >
                 Clear Cart
               </button>
@@ -488,7 +502,7 @@ export default function App() {
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-[#1C1C1C] text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 animate-fadeIn border border-white/10">
-          <span className="material-symbols-outlined text-[#b7122a]">check_circle</span>
+          <span className="material-symbols-outlined text-[#1B4D3E]">check_circle</span>
           <span className="text-xs font-bold">{toastMessage}</span>
         </div>
       )}
