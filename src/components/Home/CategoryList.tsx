@@ -48,7 +48,7 @@ export const CategoryList: React.FC<CategoryListProps> = ({
               className="flex flex-col items-center gap-1.5 min-w-[64px] snap-start group cursor-pointer"
             >
               <div
-                className={`w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm group-hover:shadow-md transition-all duration-200 relative bg-[#F5F1E8] ${
+                className={`w-[56px] h-[56px] rounded-full overflow-hidden shadow-sm group-hover:shadow-md transition-all duration-200 relative ${
                   isSelected
                     ? 'ring-4 ring-[#1B4D3E] scale-105'
                     : 'ring-2 ring-transparent group-hover:ring-[#1B4D3E]/30'

@@ -48,7 +48,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
         onClick={onClose}
       />
 
-      <div className="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl shadow-2xl relative z-10 flex flex-col max-h-[90vh] animate-slideUp overflow-hidden">
+      <div className="bg-white w-full sm:max-w-lg rounded-t sm:rounded shadow-2xl relative z-10 flex flex-col max-h-[90vh] animate-slideUp overflow-hidden">
 
         {/* Image Section */}
         <div className="relative h-64 md:h-80 w-full bg-gray-100 shrink-0">
@@ -89,17 +89,17 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
 
         {/* Fixed Footer */}
         <div className="p-4 sm:p-5 border-t border-gray-100 bg-white shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] shrink-0 flex items-center gap-4">
-          <div className="flex items-center bg-gray-100 rounded-2xl p-1 shrink-0">
+          <div className="flex items-center bg-gray-100 rounded p-1 shrink-0">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-700 font-bold hover:bg-white hover:shadow-sm transition-all"
+              className="w-10 h-10 rounded flex items-center justify-center text-gray-700 font-bold hover:bg-white hover:shadow-sm transition-all"
             >
               <span className="material-symbols-outlined">remove</span>
             </button>
             <span className="w-10 text-center font-bold">{quantity}</span>
             <button
               onClick={() => setQuantity(quantity + 1)}
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-700 font-bold hover:bg-white hover:shadow-sm transition-all"
+              className="w-10 h-10 rounded flex items-center justify-center text-gray-700 font-bold hover:bg-white hover:shadow-sm transition-all"
             >
               <span className="material-symbols-outlined">add</span>
             </button>
@@ -107,7 +107,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
 
           <button
             onClick={handleAddToCart}
-            className="flex-1 bg-[#1B4D3E] text-white py-3.5 px-6 rounded-2xl font-bold shadow-sm hover:bg-[#123329] transition-colors flex justify-between items-center"
+            className="flex-1 bg-[#1B4D3E] text-white py-3.5 px-6 rounded font-bold shadow-sm hover:bg-[#123329] transition-colors flex justify-between items-center"
           >
             <span>Add to Cart</span>
             <span>₹{totalPrice.toFixed(2)}</span>

@@ -43,8 +43,8 @@ export const AdminDashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((stat, idx) => (
-          <div key={idx} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${stat.bg} ${stat.color}`}>
+          <div key={idx} className="bg-white p-6 rounded shadow-sm border border-gray-100 flex items-center gap-4">
+            <div className={`w-14 h-14 rounded flex items-center justify-center ${stat.bg} ${stat.color}`}>
               <span className="material-symbols-outlined text-3xl">{stat.icon}</span>
             </div>
             <div>

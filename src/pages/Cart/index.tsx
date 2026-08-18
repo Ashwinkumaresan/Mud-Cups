@@ -76,7 +76,7 @@ export const CartPage: React.FC<CartPageProps> = ({
         <div className="flex gap-4 mt-6">
           <button
             onClick={() => navigate('/orders')}
-            className="bg-[#1B4D3E] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#123329] transition-all shadow-sm"
+            className="bg-[#1B4D3E] text-white px-8 py-3 rounded font-bold hover:bg-[#123329] transition-all shadow-sm"
           >
             View My Orders
           </button>
@@ -97,7 +97,7 @@ export const CartPage: React.FC<CartPageProps> = ({
         </p>
         <button
           onClick={() => navigate('/')}
-          className="mt-4 bg-[#1B4D3E] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#123329] transition-all shadow-sm flex items-center gap-2"
+          className="mt-4 bg-[#1B4D3E] text-white px-6 py-3 rounded font-bold hover:bg-[#123329] transition-all shadow-sm flex items-center gap-2"
         >
           <span className="material-symbols-outlined text-lg">restaurant_menu</span>
           Browse Menu
@@ -119,7 +119,7 @@ export const CartPage: React.FC<CartPageProps> = ({
           </button>
           <h1 className="text-2xl font-extrabold text-[#271717]">Your Cart</h1>
         </div>
-        <span className="bg-[#1B4D3E]/10 text-[#1B4D3E] px-3 py-1 rounded-lg font-bold text-sm">
+        <span className="bg-[#1B4D3E]/10 text-[#1B4D3E] px-3 py-1 rounded font-bold text-sm">
           {cartItems.length} Item{cartItems.length !== 1 ? 's' : ''}
         </span>
       </div>
@@ -127,7 +127,7 @@ export const CartPage: React.FC<CartPageProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-8 space-y-6">
           {/* Customer Details */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-100">
               <h2 className="font-bold text-gray-800 flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#1B4D3E]">person</span>
@@ -145,7 +145,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                   value={orderName}
                   onChange={(e) => setOrderName(e.target.value)}
                   placeholder="Enter your name" 
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]/20 focus:border-[#1B4D3E] transition-all"
+                  className="w-full px-4 py-3 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]/20 focus:border-[#1B4D3E] transition-all"
                   required
                 />
               </div>
@@ -155,7 +155,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                 </label>
                 <div 
                   onClick={() => setIsCheckoutModalOpen(true)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-between cursor-pointer hover:border-[#1B4D3E] hover:bg-red-50 transition-all group"
+                  className="w-full px-4 py-3 rounded border border-gray-200 bg-gray-50 flex items-center justify-between cursor-pointer hover:border-[#1B4D3E] hover:bg-red-50 transition-all group"
                 >
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-gray-400 group-hover:text-[#1B4D3E] transition-colors">
@@ -165,7 +165,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                       {tableNumber === 'Takeaway' ? 'Takeaway' : tableNumber ? `Table ${tableNumber}` : 'Select Preference'}
                     </span>
                   </div>
-                  <span className="text-[#1B4D3E] text-sm font-bold bg-[#1B4D3E]/10 px-3 py-1 rounded-lg group-hover:bg-[#1B4D3E] group-hover:text-white transition-colors">
+                  <span className="text-[#1B4D3E] text-sm font-bold bg-[#1B4D3E]/10 px-3 py-1 rounded group-hover:bg-[#1B4D3E] group-hover:text-white transition-colors">
                     Change
                   </span>
                 </div>
@@ -174,7 +174,7 @@ export const CartPage: React.FC<CartPageProps> = ({
           </div>
 
           {/* Cart Items List */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-100">
               <h2 className="font-bold text-gray-800 flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#1B4D3E]">restaurant</span>
@@ -183,11 +183,11 @@ export const CartPage: React.FC<CartPageProps> = ({
             </div>
             <div className="p-4 space-y-4">
               {cartItems.map((cartItem, idx) => (
-                <div key={idx} className="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
+                <div key={idx} className="flex gap-4 p-3 rounded hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
                   <img
                     src={cartItem.item.image || 'https://via.placeholder.com/100x100?text=No+Image'}
                     alt={cartItem.item.name}
-                    className="w-20 h-20 rounded-xl object-cover shadow-xs"
+                    className="w-20 h-20 rounded object-cover shadow-xs"
                   />
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
@@ -204,7 +204,7 @@ export const CartPage: React.FC<CartPageProps> = ({
 
                     <div className="flex items-center justify-between mt-2">
                       <span className="font-extrabold text-[#1B4D3E]">₹{cartItem.totalPrice.toFixed(2)}</span>
-                      <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-2 py-1 shadow-xs">
+                      <div className="flex items-center gap-3 bg-white border border-gray-200 rounded px-2 py-1 shadow-xs">
                         <button
                           onClick={() => onUpdateCartQuantity(idx, -1)}
                           className="text-gray-500 hover:text-[#1B4D3E] transition-colors w-6 h-6 flex items-center justify-center font-bold"
@@ -229,7 +229,7 @@ export const CartPage: React.FC<CartPageProps> = ({
 
         <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
           {/* Bill Details */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-white rounded shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-100">
               <h2 className="font-bold text-gray-800 flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#1B4D3E]">receipt_long</span>
@@ -258,7 +258,7 @@ export const CartPage: React.FC<CartPageProps> = ({
             />
           ) : (
             <button
-              className="w-full bg-[#1B4D3E] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#123329] transition-colors shadow-sm"
+              className="w-full bg-[#1B4D3E] text-white py-4 rounded font-bold text-lg hover:bg-[#123329] transition-colors shadow-sm"
               onClick={() => navigate('/login?redirect=/cart')}
             >
               Login to Checkout

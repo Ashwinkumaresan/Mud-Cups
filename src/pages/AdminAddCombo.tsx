@@ -146,22 +146,22 @@ export const AdminAddCombo: React.FC = () => {
         
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
           {/* Veg Filter */}
-          <div className="flex bg-gray-100 rounded-xl p-1 w-full sm:w-auto shrink-0">
+          <div className="flex bg-gray-100 rounded p-1 w-full sm:w-auto shrink-0">
             <button 
               onClick={() => setVegFilter('all')}
-              className={`flex-1 sm:flex-none px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors ${vegFilter === 'all' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`flex-1 sm:flex-none px-4 py-1.5 rounded text-sm font-semibold transition-colors ${vegFilter === 'all' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
             >
               All
             </button>
             <button 
               onClick={() => setVegFilter('veg')}
-              className={`flex-1 sm:flex-none px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-1 ${vegFilter === 'veg' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500 hover:text-green-700'}`}
+              className={`flex-1 sm:flex-none px-4 py-1.5 rounded text-sm font-semibold transition-colors flex items-center justify-center gap-1 ${vegFilter === 'veg' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500 hover:text-green-700'}`}
             >
               <span className="material-symbols-outlined text-[16px]">eco</span> Veg
             </button>
             <button 
               onClick={() => setVegFilter('non-veg')}
-              className={`flex-1 sm:flex-none px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-1 ${vegFilter === 'non-veg' ? 'bg-white text-red-700 shadow-sm' : 'text-gray-500 hover:text-red-700'}`}
+              className={`flex-1 sm:flex-none px-4 py-1.5 rounded text-sm font-semibold transition-colors flex items-center justify-center gap-1 ${vegFilter === 'non-veg' ? 'bg-white text-red-700 shadow-sm' : 'text-gray-500 hover:text-red-700'}`}
             >
               <span className="material-symbols-outlined text-[16px]">restaurant</span> Non-Veg
             </button>
@@ -175,13 +175,13 @@ export const AdminAddCombo: React.FC = () => {
               placeholder="Search combos..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
             />
           </div>
 
           <button 
             onClick={handleOpenModal}
-            className="flex items-center justify-center gap-2 bg-[#1B4D3E] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#123329] transition-colors whitespace-nowrap w-full sm:w-auto"
+            className="flex items-center justify-center gap-2 bg-[#1B4D3E] text-white px-5 py-2.5 rounded font-bold hover:bg-[#123329] transition-colors whitespace-nowrap w-full sm:w-auto"
           >
             <span className="material-symbols-outlined">add</span>
             Add Combo
@@ -196,8 +196,8 @@ export const AdminAddCombo: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCombos.map(combo => (
-            <div key={combo.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center gap-4 group">
-              <div className="w-16 h-16 rounded-xl bg-gray-100 overflow-hidden shrink-0">
+            <div key={combo.id} className="bg-white rounded p-4 shadow-sm border border-gray-100 flex items-center gap-4 group">
+              <div className="w-16 h-16 rounded bg-gray-100 overflow-hidden shrink-0">
                 {combo.image ? (
                   <img src={combo.image} alt={combo.name} className="w-full h-full object-cover" />
                 ) : (
@@ -241,7 +241,7 @@ export const AdminAddCombo: React.FC = () => {
       {/* Add Combo Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="bg-white rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden animate-slideUp flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded w-full max-w-2xl shadow-2xl overflow-hidden animate-slideUp flex flex-col max-h-[90vh]">
             <div className="flex justify-between items-center p-6 border-b border-gray-100 shrink-0">
               <h3 className="text-xl font-extrabold text-[#271717]">Add New Combo</h3>
               <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -256,7 +256,7 @@ export const AdminAddCombo: React.FC = () => {
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 rounded border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
                     placeholder="e.g., Breakfast Special"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -270,7 +270,7 @@ export const AdminAddCombo: React.FC = () => {
                       type="number"
                       step="0.01"
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
+                      className="w-full px-4 py-3 rounded border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
                       placeholder="0.00"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
@@ -279,7 +279,7 @@ export const AdminAddCombo: React.FC = () => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1.5">Original Total (₹)</label>
-                    <div className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-500 transition-all flex items-center">
+                    <div className="w-full px-4 py-3 rounded border border-gray-200 bg-gray-50 text-gray-500 transition-all flex items-center">
                       {calculatedOriginalPrice.toFixed(2)}
                     </div>
                   </div>
@@ -295,13 +295,13 @@ export const AdminAddCombo: React.FC = () => {
                         placeholder="Search items..."
                         value={itemSearchQuery}
                         onChange={(e) => setItemSearchQuery(e.target.value)}
-                        className="pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none w-48"
+                        className="pl-8 pr-3 py-1.5 text-sm border border-gray-200 rounded focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none w-48"
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded-xl border border-gray-200">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-48 overflow-y-auto p-2 bg-gray-50 rounded border border-gray-200">
                     {filteredModalFoodItems.map(item => (
-                      <label key={item.id} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-100 cursor-pointer hover:border-[#1B4D3E] transition-colors shadow-sm">
+                      <label key={item.id} className="flex items-center gap-3 p-3 bg-white rounded border border-gray-100 cursor-pointer hover:border-[#1B4D3E] transition-colors shadow-sm">
                         <input
                           type="checkbox"
                           checked={selectedItems.includes(item.id)}
@@ -321,11 +321,11 @@ export const AdminAddCombo: React.FC = () => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Dietary Preference (Auto)</label>
                     <div className="flex gap-4">
-                      <div className={`flex-1 flex items-center justify-center gap-2 border rounded-xl py-2.5 transition-colors ${isComboVeg ? 'border-green-600 bg-green-50 text-green-700' : 'border-gray-200 text-gray-400 bg-gray-50'}`}>
+                      <div className={`flex-1 flex items-center justify-center gap-2 border rounded py-2.5 transition-colors ${isComboVeg ? 'border-green-600 bg-green-50 text-green-700' : 'border-gray-200 text-gray-400 bg-gray-50'}`}>
                         <span className="material-symbols-outlined text-[18px]">eco</span>
                         <span className="text-sm font-bold">Veg</span>
                       </div>
-                      <div className={`flex-1 flex items-center justify-center gap-2 border rounded-xl py-2.5 transition-colors ${!isComboVeg ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-200 text-gray-400 bg-gray-50'}`}>
+                      <div className={`flex-1 flex items-center justify-center gap-2 border rounded py-2.5 transition-colors ${!isComboVeg ? 'border-red-600 bg-red-50 text-red-700' : 'border-gray-200 text-gray-400 bg-gray-50'}`}>
                         <span className="material-symbols-outlined text-[18px]">restaurant</span>
                         <span className="text-sm font-bold">Non-Veg</span>
                       </div>
@@ -335,7 +335,7 @@ export const AdminAddCombo: React.FC = () => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Combo Image</label>
                     <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+                      <div className="w-16 h-16 rounded bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
                         {previewUrl ? (
                           <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
                         ) : (
@@ -343,7 +343,7 @@ export const AdminAddCombo: React.FC = () => {
                         )}
                       </div>
                       <div className="flex-1">
-                        <label className="cursor-pointer inline-flex items-center justify-center gap-2 w-full px-6 py-3 bg-white border border-gray-300 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors">
+                        <label className="cursor-pointer inline-flex items-center justify-center gap-2 w-full px-6 py-3 bg-white border border-gray-300 rounded text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors">
                           <span className="material-symbols-outlined text-sm">upload</span>
                           Upload Image
                           <input type="file" className="sr-only" accept="image/*" onChange={handleImageChange} required />
@@ -359,7 +359,7 @@ export const AdminAddCombo: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="flex-1 py-3 rounded-xl font-bold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-3 rounded font-bold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
@@ -367,7 +367,7 @@ export const AdminAddCombo: React.FC = () => {
                 type="submit"
                 form="add-combo-form"
                 disabled={isSubmitting}
-                className="flex-1 py-3 rounded-xl font-bold text-white bg-[#1B4D3E] hover:bg-[#123329] transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-3 rounded font-bold text-white bg-[#1B4D3E] hover:bg-[#123329] transition-colors flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

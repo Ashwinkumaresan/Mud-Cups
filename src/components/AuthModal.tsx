@@ -163,7 +163,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
-      <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl relative border border-gray-100 flex flex-col max-h-[92vh] overflow-y-auto">
+      <div className="bg-white rounded max-w-md w-full shadow-2xl relative border border-gray-100 flex flex-col max-h-[92vh] overflow-y-auto">
         {/* Header with Title & Close */}
         <div className="p-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
           <div className="flex items-center gap-2">
@@ -197,7 +197,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               stopCamera();
               setActiveTab('invite');
             }}
-            className={`flex-1 py-2 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`flex-1 py-2 rounded font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
               activeTab === 'invite'
                 ? 'bg-white text-[#1B4D3E] shadow-xs border border-gray-200/80'
                 : 'text-gray-500 hover:text-gray-800'
@@ -208,7 +208,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </button>
           <button
             onClick={() => setActiveTab('join')}
-            className={`flex-1 py-2 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`flex-1 py-2 rounded font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
               activeTab === 'join'
                 ? 'bg-white text-[#1B4D3E] shadow-xs border border-gray-200/80'
                 : 'text-gray-500 hover:text-gray-800'
@@ -225,16 +225,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {activeTab === 'invite' && (
             <div className="space-y-6 animate-fadeIn">
               {/* QR Code display box */}
-              <div className="bg-gray-50 p-6 rounded-2xl border border-[#1B4D3E]/20 flex flex-col items-center text-center relative overflow-hidden">
-                <div className="bg-white p-3 rounded-2xl shadow-md border border-[#1B4D3E]/10 mb-3">
+              <div className="bg-gray-50 p-6 rounded border border-[#1B4D3E]/20 flex flex-col items-center text-center relative overflow-hidden">
+                <div className="bg-white p-3 rounded shadow-md border border-[#1B4D3E]/10 mb-3">
                   {qrDataUrl ? (
                     <img
                       src={qrDataUrl}
                       alt={`QR Code for session ${sessionId}`}
-                      className="w-48 h-48 object-contain rounded-lg"
+                      className="w-48 h-48 object-contain rounded"
                     />
                   ) : (
-                    <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400">
+                    <div className="w-48 h-48 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">
                       Generating QR Code...
                     </div>
                   )}
@@ -255,7 +255,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1">
                     Session ID
                   </label>
-                  <div className="flex items-center gap-2 bg-gray-50 p-2.5 rounded-xl border border-gray-200">
+                  <div className="flex items-center gap-2 bg-gray-50 p-2.5 rounded border border-gray-200">
                     <span className="material-symbols-outlined text-[#1B4D3E] text-lg">
                       fingerprint
                     </span>
@@ -264,7 +264,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     </span>
                     <button
                       onClick={handleCopyId}
-                      className="bg-white hover:bg-gray-100 text-gray-700 px-2.5 py-1 rounded-lg text-xs font-bold border border-gray-200 transition-colors flex items-center gap-1 cursor-pointer"
+                      className="bg-white hover:bg-gray-100 text-gray-700 px-2.5 py-1 rounded text-xs font-bold border border-gray-200 transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-sm">
                         {copiedId ? 'check' : 'content_copy'}
@@ -279,7 +279,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block mb-1">
                     Shareable Link
                   </label>
-                  <div className="flex items-center gap-2 bg-gray-50 p-2.5 rounded-xl border border-gray-200">
+                  <div className="flex items-center gap-2 bg-gray-50 p-2.5 rounded border border-gray-200">
                     <span className="material-symbols-outlined text-gray-400 text-lg">
                       link
                     </span>
@@ -291,7 +291,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     />
                     <button
                       onClick={handleCopyLink}
-                      className="bg-[#1B4D3E] hover:bg-[#123329] text-white px-3 py-1 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
+                      className="bg-[#1B4D3E] hover:bg-[#123329] text-white px-3 py-1 rounded text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
                     >
                       <span className="material-symbols-outlined text-sm">
                         {copiedLink ? 'check' : 'share'}
@@ -306,7 +306,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <button
                   onClick={handleDownloadQR}
-                  className="bg-gray-900 hover:bg-black text-white py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                  className="bg-gray-900 hover:bg-black text-white py-2.5 rounded text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                 >
                   <span className="material-symbols-outlined text-base">download</span>
                   Download QR
@@ -314,7 +314,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
                 <button
                   onClick={onNewSession}
-                  className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2.5 rounded text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-base">autorenew</span>
                   New Session ID
@@ -327,7 +327,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {activeTab === 'join' && (
             <div className="space-y-6 animate-fadeIn">
               {/* Option 1: QR Scanner */}
-              <div className="bg-gray-50 p-4 rounded-2xl border border-gray-200 space-y-3">
+              <div className="bg-gray-50 p-4 rounded border border-gray-200 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-extrabold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-[#1B4D3E] text-lg">
@@ -343,7 +343,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   )}
                 </div>
 
-                <div className="relative bg-black rounded-xl overflow-hidden aspect-video flex items-center justify-center border border-gray-800">
+                <div className="relative bg-black rounded overflow-hidden aspect-video flex items-center justify-center border border-gray-800">
                   {isScanning ? (
                     <>
                       <video
@@ -351,7 +351,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                         className="w-full h-full object-cover"
                         playsInline
                       />
-                      <div className="absolute inset-0 border-2 border-dashed border-[#1B4D3E]/70 rounded-xl m-6 pointer-events-none animate-pulse flex items-center justify-center">
+                      <div className="absolute inset-0 border-2 border-dashed border-[#1B4D3E]/70 rounded m-6 pointer-events-none animate-pulse flex items-center justify-center">
                         <span className="text-[10px] text-white bg-black/60 px-2 py-1 rounded">
                           Center QR Code
                         </span>
@@ -370,7 +370,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </div>
 
                 {scannerStatus && (
-                  <p className="text-[11px] text-gray-600 bg-white p-2 rounded-lg border border-gray-200 text-center">
+                  <p className="text-[11px] text-gray-600 bg-white p-2 rounded border border-gray-200 text-center">
                     {scannerStatus}
                   </p>
                 )}
@@ -379,7 +379,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   {!isScanning ? (
                     <button
                       onClick={handleStartCamera}
-                      className="flex-1 bg-[#1B4D3E] hover:bg-[#123329] text-white py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="flex-1 bg-[#1B4D3E] hover:bg-[#123329] text-white py-2 rounded text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-base">videocam</span>
                       Start Camera Scanner
@@ -387,7 +387,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   ) : (
                     <button
                       onClick={stopCamera}
-                      className="flex-1 bg-gray-800 hover:bg-gray-900 text-white py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="flex-1 bg-gray-800 hover:bg-gray-900 text-white py-2 rounded text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-base">videocam_off</span>
                       Stop Camera
@@ -396,7 +396,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
                   <button
                     onClick={handleSimulateQRScan}
-                    className="bg-white hover:bg-gray-100 text-gray-800 px-3 py-2 rounded-xl text-xs font-bold border border-gray-200 transition-all flex items-center justify-center gap-1 cursor-pointer shadow-2xs"
+                    className="bg-white hover:bg-gray-100 text-gray-800 px-3 py-2 rounded text-xs font-bold border border-gray-200 transition-all flex items-center justify-center gap-1 cursor-pointer shadow-2xs"
                     title="Simulate scanning a demo session"
                   >
                     <span className="material-symbols-outlined text-base text-[#1B4D3E]">
@@ -421,11 +421,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       setJoinError('');
                     }}
                     placeholder="e.g. SESS-A7F2-9K1L or paste full link"
-                    className="w-full text-xs border border-gray-300 rounded-xl p-3 pr-20 focus:outline-none focus:border-[#1B4D3E] font-mono bg-white"
+                    className="w-full text-xs border border-gray-300 rounded p-3 pr-20 focus:outline-none focus:border-[#1B4D3E] font-mono bg-white"
                   />
                   <button
                     type="submit"
-                    className="absolute right-1.5 top-1.5 bottom-1.5 bg-[#1B4D3E] hover:bg-[#123329] text-white px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                    className="absolute right-1.5 top-1.5 bottom-1.5 bg-[#1B4D3E] hover:bg-[#123329] text-white px-3 rounded text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
                   >
                     <span>Join</span>
                     <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -452,7 +452,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 {activeOrders.map((order) => (
                   <div
                     key={order.orderId}
-                    className="p-3 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between"
+                    className="p-3 bg-gray-50 rounded border border-gray-200 flex items-center justify-between"
                   >
                     <div>
                       <div className="text-xs font-bold text-gray-900">

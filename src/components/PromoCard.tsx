@@ -18,7 +18,7 @@ export const PromoCard: React.FC<PromoCardProps> = ({
   isVeg,
 }) => {
   return (
-    <div className="w-[180px] bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col cursor-pointer active:scale-95 transition-transform">
+    <div className="w-[180px] bg-white rounded overflow-hidden shadow-sm border border-gray-100 flex flex-col cursor-pointer active:scale-95 transition-transform">
       <div className="relative h-[120px] w-full">
         <img
           src={image}

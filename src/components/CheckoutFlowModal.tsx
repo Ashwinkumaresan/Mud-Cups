@@ -50,7 +50,7 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl animate-slideUp relative overflow-hidden">
+      <div className="bg-white rounded p-6 w-full max-w-lg shadow-2xl animate-slideUp relative overflow-hidden">
         
         {/* Close Button */}
         <button 
@@ -78,7 +78,7 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
             <div className="grid grid-cols-2 gap-4">
               <button 
                 onClick={() => handleOrderTypeSelect('dine_in')}
-                className="flex flex-col items-center justify-center p-6 border-2 border-gray-100 rounded-2xl hover:border-[#1B4D3E] hover:bg-red-50 transition-all group"
+                className="flex flex-col items-center justify-center p-6 border-2 border-gray-100 rounded hover:border-[#1B4D3E] hover:bg-red-50 transition-all group"
               >
                 <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-white group-hover:shadow-sm transition-all">
                   <span className="material-symbols-outlined text-4xl text-[#1B4D3E]">restaurant</span>
@@ -88,7 +88,7 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
               
               <button 
                 onClick={() => handleOrderTypeSelect('take_away')}
-                className="flex flex-col items-center justify-center p-6 border-2 border-gray-100 rounded-2xl hover:border-[#1B4D3E] hover:bg-red-50 transition-all group"
+                className="flex flex-col items-center justify-center p-6 border-2 border-gray-100 rounded hover:border-[#1B4D3E] hover:bg-red-50 transition-all group"
               >
                 <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-white group-hover:shadow-sm transition-all">
                   <span className="material-symbols-outlined text-4xl text-[#1B4D3E]">takeout_dining</span>
@@ -116,7 +116,7 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
                 <button
                   key={num}
                   onClick={() => handleTableSelect(num)}
-                  className="aspect-square flex items-center justify-center border-2 border-gray-100 rounded-2xl hover:border-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white font-bold text-xl text-gray-700 transition-all"
+                  className="aspect-square flex items-center justify-center border-2 border-gray-100 rounded hover:border-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white font-bold text-xl text-gray-700 transition-all"
                 >
                   {num}
                 </button>

@@ -52,10 +52,10 @@ export const Footer: React.FC = () => {
             Help Center
           </a>
           <div className="mt-3 flex flex-col gap-2">
-            <div className="h-10 w-32 bg-white border border-[#ECECEC] rounded-lg flex items-center justify-center text-xs font-bold text-[#1C1C1C] hover:bg-gray-50 cursor-pointer transition-colors shadow-xs">
+            <div className="h-10 w-32 bg-white border border-[#ECECEC] rounded flex items-center justify-center text-xs font-bold text-[#1C1C1C] hover:bg-gray-50 cursor-pointer transition-colors shadow-xs">
               App Store
             </div>
-            <div className="h-10 w-32 bg-white border border-[#ECECEC] rounded-lg flex items-center justify-center text-xs font-bold text-[#1C1C1C] hover:bg-gray-50 cursor-pointer transition-colors shadow-xs">
+            <div className="h-10 w-32 bg-white border border-[#ECECEC] rounded flex items-center justify-center text-xs font-bold text-[#1C1C1C] hover:bg-gray-50 cursor-pointer transition-colors shadow-xs">
               Google Play
             </div>
           </div>

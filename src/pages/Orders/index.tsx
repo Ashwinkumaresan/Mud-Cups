@@ -37,7 +37,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
           </p>
           <button
             onClick={() => navigate('/')}
-            className="mt-4 bg-[#1B4D3E] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#123329] transition-all shadow-sm"
+            className="mt-4 bg-[#1B4D3E] text-white px-6 py-3 rounded font-bold hover:bg-[#123329] transition-all shadow-sm"
           >
             Browse Menu
           </button>
@@ -45,7 +45,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
       ) : (
         <div className="space-y-4">
           {activeOrders.map((order, idx) => (
-            <div key={idx} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 space-y-4 relative overflow-hidden">
+            <div key={idx} className="bg-white rounded shadow-sm border border-gray-100 p-5 space-y-4 relative overflow-hidden">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -72,7 +72,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
                       <img
                         src={cartItem.item.image || 'https://via.placeholder.com/100x100?text=No+Image'}
                         alt={cartItem.item.name}
-                        className="w-12 h-12 rounded-lg object-cover shadow-xs"
+                        className="w-12 h-12 rounded object-cover shadow-xs"
                       />
                       <div className="flex-1">
                         <div className="flex justify-between">

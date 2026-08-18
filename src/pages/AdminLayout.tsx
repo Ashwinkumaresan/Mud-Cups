@@ -17,7 +17,7 @@ export const AdminLayout: React.FC = () => {
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex sticky top-0 h-screen shrink-0">
         <div className="p-6 flex items-center gap-3 border-b border-gray-100 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 bg-[#1B4D3E] rounded-xl flex items-center justify-center text-white">
+          <div className="w-10 h-10 bg-[#1B4D3E] rounded flex items-center justify-center text-white">
             <span className="material-symbols-outlined">local_cafe</span>
           </div>
           <h1 className="text-xl font-extrabold text-[#271717] tracking-tight">Mud Cups <span className="text-[#1B4D3E] block text-xs tracking-widest uppercase">Admin</span></h1>
@@ -30,7 +30,7 @@ export const AdminLayout: React.FC = () => {
               to={item.path}
               end={item.end}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+                `flex items-center gap-3 px-4 py-3 rounded font-semibold transition-all ${
                   isActive
                     ? 'bg-[#1B4D3E] text-white shadow-md'
                     : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
@@ -46,7 +46,7 @@ export const AdminLayout: React.FC = () => {
         <div className="p-4 border-t border-gray-200">
           <button 
             onClick={() => navigate('/')}
-            className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-100 hover:text-gray-900 rounded-xl font-semibold w-full transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-100 hover:text-gray-900 rounded font-semibold w-full transition-all"
           >
             <span className="material-symbols-outlined">storefront</span>
             Back to Store

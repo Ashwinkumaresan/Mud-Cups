@@ -87,7 +87,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
             onConfirm();
           }
         }}
-        className={`hidden lg:flex w-full relative overflow-hidden bg-[#1B4D3E] hover:bg-[#123329] active:scale-95 cursor-pointer text-white py-4 rounded-xl font-bold transition-all shadow-sm items-center justify-between px-6`}
+        className={`hidden lg:flex w-full relative overflow-hidden bg-[#1B4D3E] hover:bg-[#123329] active:scale-95 cursor-pointer text-white py-4 rounded font-bold transition-all shadow-sm items-center justify-between px-6`}
       >
         <span className="flex items-center gap-2">
           Place Order
@@ -105,7 +105,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
 
       <div className={`md:hidden fixed bottom-4 left-4 right-4 z-50 flex flex-col gap-2 animate-slideUp`}>
         <div 
-          className="relative w-full h-16 rounded-xl overflow-hidden shadow-2xl flex items-center justify-center select-none"
+          className="relative w-full h-16 rounded overflow-hidden shadow-2xl flex items-center justify-center select-none"
           style={{ 
             backgroundColor: bgColor,
             touchAction: 'none',
@@ -128,7 +128,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
             ref={thumbRef}
           >
             <div 
-              className={`w-14 h-14 bg-white rounded-lg flex items-center justify-center shadow-sm ${disabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}`}
+              className={`w-14 h-14 bg-white rounded flex items-center justify-center shadow-sm ${disabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}`}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}

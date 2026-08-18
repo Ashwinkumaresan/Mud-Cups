@@ -40,7 +40,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
           onFocus={() => setIsSearchFocused(true)}
           onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
           placeholder="Search for restaurants, dishes..."
-          className="w-full bg-[#F5F1E8] text-[#1C1C1C] placeholder-gray-500 rounded-xl pl-12 pr-10 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]/30 transition-all shadow-inner"
+          className="w-full bg-[#f3f3f3] text-[#1C1C1C] placeholder-gray-500 rounded pl-12 pr-10 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]/30 transition-all shadow-inner"
         />
         {filters.searchQuery && (
           <button
@@ -64,7 +64,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
                   <button
                     key={suggestion}
                     onMouseDown={() => handleSelectSuggestion(suggestion)}
-                    className="flex items-center gap-2 text-left px-3 py-2.5 text-sm text-[#1C1C1C] hover:bg-[#F5F1E8] hover:text-[#1B4D3E] rounded-lg transition-colors cursor-pointer"
+                    className="flex items-center gap-2 text-left px-3 py-2.5 text-sm text-[#1C1C1C] hover:bg-[#F5F1E8] hover:text-[#1B4D3E] rounded transition-colors cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-gray-400 text-base">
                       trending_up
@@ -79,10 +79,10 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
 
       {/* Veg Only Checkbox Label */}
       <label
-        className={`flex items-center justify-center gap-1.5 cursor-pointer border px-4 py-3.5 rounded-xl shadow-sm transition-all text-sm font-semibold shrink-0 w-auto ${
+        className={`flex items-center justify-center gap-1.5 cursor-pointer border px-4 py-3.5 rounded shadow-sm transition-all text-sm font-semibold shrink-0 w-auto ${
           filters.vegOnly
             ? 'bg-green-50 border-green-600 text-green-700'
-            : 'bg-white border-gray-200 text-[#1C1C1C] hover:bg-gray-50'
+            : 'bg-[#f3f3f3] border-gray-200 text-[#1C1C1C] hover:bg-gray-50'
         }`}
       >
         <input

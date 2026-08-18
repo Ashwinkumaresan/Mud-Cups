@@ -125,12 +125,12 @@ export const AdminAddCategory: React.FC = () => {
               placeholder="Search categories..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
             />
           </div>
           <button 
             onClick={handleOpenModal}
-            className="flex items-center gap-2 bg-[#1B4D3E] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#123329] transition-colors whitespace-nowrap"
+            className="flex items-center gap-2 bg-[#1B4D3E] text-white px-5 py-2.5 rounded font-bold hover:bg-[#123329] transition-colors whitespace-nowrap"
           >
             <span className="material-symbols-outlined">add</span>
             Add Category
@@ -145,12 +145,12 @@ export const AdminAddCategory: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 gap-6">
           {filteredCategories.map(category => (
-            <div key={category.id} className={`bg-white rounded-2xl shadow-sm border ${expandedCategory === category.id ? 'border-[#1B4D3E]' : 'border-gray-100'} overflow-hidden transition-colors`}>
+            <div key={category.id} className={`bg-white rounded shadow-sm border ${expandedCategory === category.id ? 'border-[#1B4D3E]' : 'border-gray-100'} overflow-hidden transition-colors`}>
               <div 
                 className="p-4 flex items-center gap-4 group cursor-pointer hover:bg-gray-50"
                 onClick={() => handleToggleExpand(category.id)}
               >
-                <div className="w-16 h-16 rounded-xl bg-gray-100 overflow-hidden shrink-0">
+                <div className="w-16 h-16 rounded bg-gray-100 overflow-hidden shrink-0">
                   {category.image ? (
                     <img src={category.image} alt={category.name} className="w-full h-full object-cover" />
                   ) : (
@@ -192,8 +192,8 @@ export const AdminAddCategory: React.FC = () => {
                   ) : categoryItems.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                       {categoryItems.map(item => (
-                        <div key={item.id} className="bg-white p-3 rounded-xl border border-gray-200 flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden shrink-0">
+                        <div key={item.id} className="bg-white p-3 rounded border border-gray-200 flex items-center gap-3">
+                          <div className="w-12 h-12 rounded bg-gray-100 overflow-hidden shrink-0">
                             {item.image ? (
                               <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                             ) : (
@@ -233,7 +233,7 @@ export const AdminAddCategory: React.FC = () => {
       {/* Add Category Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fadeIn">
-          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-slideUp">
+          <div className="bg-white rounded w-full max-w-md shadow-2xl overflow-hidden animate-slideUp">
             <div className="flex justify-between items-center p-6 border-b border-gray-100">
               <h3 className="text-xl font-extrabold text-[#271717]">Add New Category</h3>
               <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -247,7 +247,7 @@ export const AdminAddCategory: React.FC = () => {
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-2.5 rounded border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
                   placeholder="e.g., Hot Beverages"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -257,7 +257,7 @@ export const AdminAddCategory: React.FC = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category Image *</label>
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="w-16 h-16 rounded bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
                     {previewUrl ? (
                       <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
                     ) : (
@@ -265,7 +265,7 @@ export const AdminAddCategory: React.FC = () => {
                     )}
                   </div>
                   <div className="flex-1">
-                    <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                       <span className="material-symbols-outlined text-sm">upload</span>
                       Upload Image
                       <input type="file" className="sr-only" accept="image/*" onChange={handleImageChange} required />
@@ -278,14 +278,14 @@ export const AdminAddCategory: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-3 rounded-xl font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+                  className="flex-1 py-3 rounded font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-3 rounded-xl font-semibold text-white bg-[#1B4D3E] hover:bg-[#123329] transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 py-3 rounded font-semibold text-white bg-[#1B4D3E] hover:bg-[#123329] transition-colors flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

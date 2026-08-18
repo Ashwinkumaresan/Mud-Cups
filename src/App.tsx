@@ -450,7 +450,7 @@ export default function App() {
                   setIsCheckoutModalOpen(true);
                 }
               }}
-              className="bg-[#1B4D3E] text-white px-5 py-2 rounded-xl font-bold hover:bg-[#123329] active:scale-95 transition-all shadow-sm flex items-center gap-1 cursor-pointer"
+              className="bg-[#1B4D3E] text-white px-5 py-2 rounded font-bold hover:bg-[#123329] active:scale-95 transition-all shadow-sm flex items-center gap-1 cursor-pointer"
             >
               Checkout <span className="material-symbols-outlined text-sm">arrow_forward_ios</span>
             </button>
@@ -475,7 +475,7 @@ export default function App() {
 
       {isClearCartModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl animate-slideUp flex flex-col items-center text-center">
+          <div className="bg-white rounded p-6 w-full max-w-sm shadow-xl animate-slideUp flex flex-col items-center text-center">
             <div className="w-12 h-12 bg-red-50 text-[#1B4D3E] rounded-full flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-2xl">delete</span>
             </div>
@@ -484,13 +484,13 @@ export default function App() {
             <div className="flex items-center gap-3 w-full">
               <button 
                 onClick={() => setIsClearCartModalOpen(false)}
-                className="flex-1 bg-gray-100 text-gray-800 font-semibold py-3 rounded-xl hover:bg-gray-200 transition-colors cursor-pointer"
+                className="flex-1 bg-gray-100 text-gray-800 font-semibold py-3 rounded hover:bg-gray-200 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleClearCart}
-                className="flex-1 bg-[#1B4D3E] text-white font-semibold py-3 rounded-xl hover:bg-[#123329] transition-colors shadow-sm cursor-pointer"
+                className="flex-1 bg-[#1B4D3E] text-white font-semibold py-3 rounded hover:bg-[#123329] transition-colors shadow-sm cursor-pointer"
               >
                 Clear Cart
               </button>
@@ -501,7 +501,7 @@ export default function App() {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#1C1C1C] text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 animate-fadeIn border border-white/10">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#1C1C1C] text-white px-4 py-3 rounded shadow-xl flex items-center gap-2.5 animate-fadeIn border border-white/10">
           <span className="material-symbols-outlined text-[#1B4D3E]">check_circle</span>
           <span className="text-xs font-bold">{toastMessage}</span>
         </div>

@@ -55,7 +55,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onLogin }) => {
         </div>
 
         {error && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium flex items-center gap-2">
+          <div className="bg-red-50 text-red-600 p-4 rounded text-sm font-medium flex items-center gap-2">
             <span className="material-symbols-outlined text-lg">error</span>
             {error}
           </div>

@@ -32,7 +32,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
   }
 
   return (
-    <article className="bg-white shadow-sm rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group border border-gray-100 relative flex flex-col h-full">
+    <article className="bg-white shadow-sm rounded overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group border border-gray-100 relative flex flex-col h-full">
       {/* Image & Badges Container */}
       <div
         onClick={() => onOpenDetail(item)}
@@ -92,7 +92,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
           </div>
 
           {cartQuantity > 0 ? (
-            <div className="flex items-center gap-2 bg-white border border-[#1B4D3E] rounded-lg px-2 py-1">
+            <div className="flex items-center gap-2 bg-white border border-[#1B4D3E] rounded px-2 py-1">
               <button
                 onClick={() => onUpdateQuantity(item, -1)}
                 className="text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white rounded w-5 h-5 flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
@@ -112,7 +112,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
           ) : (
             <button
               onClick={() => onAddToCart(item)}
-              className="border-2 border-[#1B4D3E] text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all duration-200 cursor-pointer active:scale-95"
+              className="border-2 border-[#1B4D3E] text-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white px-4 py-1.5 rounded text-xs font-extrabold transition-all duration-200 cursor-pointer active:scale-95"
             >
               ADD
             </button>

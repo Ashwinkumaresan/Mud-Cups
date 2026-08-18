@@ -24,7 +24,7 @@ export const CombosPage: React.FC<CombosPageProps> = ({
   const combos = foodItems.filter((item) => item.category === 'Combos');
 
   return (
-    <div className="bg-white min-h-[70vh] rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 mb-8 animate-fadeIn">
+    <div className="bg-white min-h-[70vh] rounded shadow-sm border border-gray-100 p-4 md:p-6 mb-8 animate-fadeIn">
       <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
         <span className="material-symbols-outlined text-3xl text-[#1B4D3E]">restaurant_menu</span>
         <div>
