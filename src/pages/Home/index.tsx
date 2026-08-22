@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FilterState, FoodItem, HeroDeal, Category } from '../../types';
 import { HeroCarousel } from '../../components/Home/HeroCarousel';
 import { CategoryList } from '../../components/Home/CategoryList';
@@ -40,6 +40,7 @@ export const Home: React.FC<HomeProps> = ({
   handleUpdateQuantitySimple,
   setDetailItem,
 }) => {
+  const menuRef = useRef<HTMLDivElement>(null);
   const combos = FOOD_ITEMS.filter((item) => item.category === 'Combos');
   const offers = FOOD_ITEMS.filter((item) => item.category === 'Offers');
 
@@ -95,14 +96,23 @@ export const Home: React.FC<HomeProps> = ({
       </div>
 
       {/* Explore Menu Section */}
-      <div className="pt-2 bg-white">
+      <div className="pt-2 bg-white" ref={menuRef}>
         <SectionHeader title="Explore Our Variety" />
       </div>
       <div className="px-4 sticky top-[36px] bg-white z-30 pb-2">
         <CategoryList
           categories={categories}
           selectedCategory={filters.selectedCategory}
-          onSelectCategory={(cat) => handleUpdateFilters({ selectedCategory: cat })}
+          onSelectCategory={(cat) => {
+            handleUpdateFilters({ selectedCategory: cat });
+            setTimeout(() => {
+              if (menuRef.current) {
+                const yOffset = -100; 
+                const y = menuRef.current.getBoundingClientRect().top + window.scrollY + yOffset;
+                window.scrollTo({ top: y, behavior: 'auto' });
+              }
+            }, 100);
+          }}
         />
       </div>
 

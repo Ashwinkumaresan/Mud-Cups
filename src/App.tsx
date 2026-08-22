@@ -31,6 +31,9 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminAddCategory } from './pages/AdminAddCategory';
 import { AdminAddFoodItem } from './pages/AdminAddFoodItem';
 import { AdminAddCombo } from './pages/AdminAddCombo';
+import { AdminAddOffer } from './pages/AdminAddOffer';
+import { AdminSalesDetails } from './pages/AdminSalesDetails';
+import { NotFound } from './pages/NotFound';
 export default function App() {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
@@ -305,10 +308,11 @@ export default function App() {
 
   const location = useLocation();
 
-  const showHeaderFooter = location.pathname !== '/cart' && location.pathname !== '/orders' && location.pathname !== '/login' && location.pathname !== '/signup' && !location.pathname.startsWith('/admin');
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  const showHeaderFooter = location.pathname !== '/cart' && location.pathname !== '/orders' && location.pathname !== '/login' && location.pathname !== '/signup' && !isAdminRoute;
 
   return (
-    <div className="min-h-screen text-[#271717] flex flex-col font-sans relative pb-24">
+    <div className={`min-h-screen text-[#271717] flex flex-col font-sans relative ${isAdminRoute ? '' : 'pb-24'}`}>
       {/* Top Navbar */}
       {showHeaderFooter && (
         <Header
@@ -410,17 +414,22 @@ export default function App() {
                 />
               } 
             />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       ) : (
         <Routes>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
+            <Route path="sales" element={<AdminSalesDetails />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="add-category" element={<AdminAddCategory />} />
             <Route path="add-food-item" element={<AdminAddFoodItem />} />
             <Route path="add-combo" element={<AdminAddCombo />} />
+            <Route path="offers" element={<AdminAddOffer />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       )}
 

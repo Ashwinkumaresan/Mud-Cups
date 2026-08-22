@@ -10,10 +10,11 @@ export const AdminLayout: React.FC = () => {
     { name: 'Add Category', path: '/admin/add-category', icon: 'category' },
     { name: 'Add Food Item', path: '/admin/add-food-item', icon: 'restaurant_menu' },
     { name: 'Add Combo', path: '/admin/add-combo', icon: 'fastfood' },
+    { name: 'Add Offer', path: '/admin/offers', icon: 'local_offer' },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex sticky top-0 h-screen shrink-0">
         <div className="p-6 flex items-center gap-3 border-b border-gray-100 cursor-pointer" onClick={() => navigate('/')}>
@@ -55,7 +56,7 @@ export const AdminLayout: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
+      <main className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Mobile Header */}
         <div className="md:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between sticky top-0 z-10">
           <h1 className="text-lg font-extrabold text-[#271717]">Admin Panel</h1>
@@ -85,7 +86,7 @@ export const AdminLayout: React.FC = () => {
           ))}
         </nav>
 
-        <div className="p-4 md:p-8 flex-1">
+        <div className="p-4 md:p-8 flex-1 overflow-y-auto flex flex-col">
           <Outlet />
         </div>
       </main>
