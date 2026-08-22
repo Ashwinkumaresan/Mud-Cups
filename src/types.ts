@@ -1,3 +1,12 @@
+export interface Banner {
+  id: string | number;
+  title: string;
+  tag: string;
+  image: string;
+  image_url?: string;
+  show: boolean;
+}
+
 export interface FoodItem {
   id: string;
   name: string;

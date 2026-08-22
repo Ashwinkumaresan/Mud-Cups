@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { fetchFoodItems } from '../api';
+import { fetchFoodItems, fetchOffers, updateFoodItem } from '../api';
 import { FoodItem } from '../types';
-
-interface Offer {
-  id: string;
-  foodItem: FoodItem;
-  offerPrice: number;
-}
 
 export const AdminAddOffer: React.FC = () => {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
-  const [offers, setOffers] = useState<Offer[]>([]);
+  const [offers, setOffers] = useState<FoodItem[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Search state
@@ -32,16 +26,8 @@ export const AdminAddOffer: React.FC = () => {
         const items = await fetchFoodItems();
         setFoodItems(items);
 
-        // Add some mock offers for demonstration
-        if (items.length > 0) {
-          setOffers([
-            {
-              id: 'mock-1',
-              foodItem: items[0],
-              offerPrice: Math.floor(items[0].price * 0.8), // 20% off
-            }
-          ]);
-        }
+        const activeOffers = await fetchOffers();
+        setOffers(activeOffers);
       } catch (err) {
         console.error(err);
       } finally {
@@ -51,31 +37,37 @@ export const AdminAddOffer: React.FC = () => {
     loadData();
   }, []);
 
-  const handleAddOffer = (e: React.FormEvent) => {
+  const handleAddOffer = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedItemId || !offerPrice) return;
 
-    const item = foodItems.find(i => i.id === selectedItemId);
-    if (!item) return;
-
-    const newOffer: Offer = {
-      id: Date.now().toString(),
-      foodItem: item,
-      offerPrice: Number(offerPrice),
-    };
-
-    setOffers([newOffer, ...offers]);
-    setSelectedItemId('');
-    setOfferPrice('');
-    setIsModalOpen(false);
+    try {
+      await updateFoodItem(selectedItemId, { discount_price: Number(offerPrice) });
+      const activeOffers = await fetchOffers();
+      setOffers(activeOffers);
+      setSelectedItemId('');
+      setOfferPrice('');
+      setIsModalOpen(false);
+    } catch(err) {
+      console.error(err);
+      alert('Failed to add offer');
+    }
   };
 
-  const handleDeleteOffer = (id: string) => {
-    setOffers(offers.filter(o => o.id !== id));
+  const handleDeleteOffer = async (id: string) => {
+    if (!window.confirm("Are you sure you want to remove this offer?")) return;
+    try {
+      await updateFoodItem(id, { discount_price: 0.00 });
+      const activeOffers = await fetchOffers();
+      setOffers(activeOffers);
+    } catch(err) {
+      console.error(err);
+      alert('Failed to remove offer');
+    }
   };
 
   const filteredOffers = offers.filter(offer => 
-    offer.foodItem.name.toLowerCase().includes(searchQuery.toLowerCase())
+    offer.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const filteredFoodItems = foodItems.filter(item => 
@@ -127,8 +119,8 @@ export const AdminAddOffer: React.FC = () => {
         {filteredOffers.map(offer => (
           <div key={offer.id} className="bg-white rounded p-4 shadow-sm border border-gray-100 flex items-center gap-4 group">
             <div className="w-16 h-16 rounded bg-gray-100 overflow-hidden shrink-0">
-              {offer.foodItem.image ? (
-                <img src={offer.foodItem.image} alt={offer.foodItem.name} className="w-full h-full object-cover" />
+              {offer.image ? (
+                <img src={offer.image} alt={offer.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400">
                   <span className="material-symbols-outlined">local_offer</span>
@@ -137,15 +129,15 @@ export const AdminAddOffer: React.FC = () => {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 mb-0.5">
-                <span className={`material-symbols-outlined text-[14px] shrink-0 ${offer.foodItem.isVeg ? 'text-[#1B4D3E]' : 'text-red-600'}`}>
-                  {offer.foodItem.isVeg ? 'eco' : 'restaurant'}
+                <span className={`material-symbols-outlined text-[14px] shrink-0 ${offer.isVeg ? 'text-[#1B4D3E]' : 'text-red-600'}`}>
+                  {offer.isVeg ? 'eco' : 'restaurant'}
                 </span>
-                <h3 className="font-bold text-[#271717] truncate">{offer.foodItem.name}</h3>
+                <h3 className="font-bold text-[#271717] truncate">{offer.name}</h3>
               </div>
-              <p className="text-xs text-gray-500 truncate mb-1">{offer.foodItem.category}</p>
+              <p className="text-xs text-gray-500 truncate mb-1">{offer.category}</p>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-[#1B4D3E]">₹{offer.offerPrice}</span>
-                <span className="text-xs text-gray-400 line-through">₹{offer.foodItem.price}</span>
+                <span className="font-bold text-[#1B4D3E]">₹{offer.price}</span>
+                <span className="text-xs text-gray-400 line-through">₹{offer.originalPrice}</span>
               </div>
             </div>
             <button 

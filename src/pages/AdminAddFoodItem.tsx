@@ -18,7 +18,7 @@ export const AdminAddFoodItem: React.FC = () => {
     name: '',
     categoryId: '',
     price: '',
-    originalPrice: '',
+    discountPrice: '',
     isVeg: true,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -76,12 +76,12 @@ export const AdminAddFoodItem: React.FC = () => {
     try {
       const data = new FormData();
       data.append('name', formData.name);
-      data.append('categoryId', formData.categoryId);
+      data.append('category_id', formData.categoryId);
       data.append('price', formData.price);
-      if (formData.originalPrice) {
-        data.append('originalPrice', formData.originalPrice);
+      if (formData.discountPrice) {
+        data.append('discount_price', formData.discountPrice);
       }
-      data.append('isVeg', formData.isVeg.toString());
+      data.append('veg', formData.isVeg ? 'True' : 'False');
       if (imageFile) {
         data.append('image', imageFile);
       }
@@ -89,9 +89,9 @@ export const AdminAddFoodItem: React.FC = () => {
       await createFoodItem(data);
       setIsModalOpen(false);
       loadData(); // reload food items and categories
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to add food item');
+      alert(err.message || 'Failed to add food item');
     } finally {
       setIsSubmitting(false);
     }
@@ -276,6 +276,19 @@ export const AdminAddFoodItem: React.FC = () => {
                   </div>
 
                   <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Discount Price (₹)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      className="w-full px-4 py-3 rounded border border-gray-200 focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent outline-none transition-all"
+                      placeholder="0.00 (Optional)"
+                      value={formData.discountPrice}
+                      onChange={(e) => setFormData({ ...formData, discountPrice: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Dietary Preference *</label>
                     <div className="flex gap-4">
                       <label className={`flex-1 flex items-center justify-center gap-2 cursor-pointer border rounded py-2.5 transition-colors ${formData.isVeg ? 'border-green-600 bg-green-50 text-green-700' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
@@ -302,7 +315,6 @@ export const AdminAddFoodItem: React.FC = () => {
                       </label>
                     </div>
                   </div>
-                </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Item Image</label>

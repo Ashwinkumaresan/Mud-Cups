@@ -89,14 +89,14 @@ export const AdminAddCombo: React.FC = () => {
     try {
       const data = new FormData();
       data.append('name', formData.name);
-      data.append('price', formData.price);
+      data.append('combo_reduced_price', formData.price);
       if (calculatedOriginalPrice > 0) {
-        data.append('originalPrice', calculatedOriginalPrice.toString());
+        data.append('original_total', calculatedOriginalPrice.toString());
       }
-      data.append('isVeg', isComboVeg.toString());
+      data.append('veg', isComboVeg ? 'True' : 'False');
       
       selectedItems.forEach(id => {
-        data.append('itemIds', id);
+        data.append('food_ids', id);
       });
 
       if (imageFile) {
@@ -105,23 +105,23 @@ export const AdminAddCombo: React.FC = () => {
       
       await createCombo(data);
       setIsModalOpen(false);
-      loadData(); // reload combos
-    } catch (err) {
+      loadData(); // reload to get new combo
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to add combo');
+      alert(err.message || 'Failed to create combo');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDelete = async (comboId: string) => {
-    if (!window.confirm(`Are you sure you want to delete combo "${comboId}"?`)) return;
+    if (!window.confirm("Are you sure you want to delete this combo?")) return;
     try {
       await deleteCombo(comboId);
       setCombos(prev => prev.filter(c => c.id !== comboId));
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to delete combo');
+      alert(err.message || 'Failed to delete combo');
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { FilterState, FoodItem, HeroDeal, Category } from '../../types';
+import { FilterState, FoodItem, HeroDeal, Category, Banner } from '../../types';
 import { HeroCarousel } from '../../components/Home/HeroCarousel';
 import { CategoryList } from '../../components/Home/CategoryList';
 import { FoodCard } from '../../components/Home/FoodCard';
@@ -8,6 +8,7 @@ import { OfferGameToggle } from '../../components/Home/OfferGameToggle';
 import { HorizontalScrollList } from '../../components/Home/HorizontalScrollList';
 import { SectionHeader } from '../../components/Home/SectionHeader';
 import { HERO_DEALS, FOOD_ITEMS } from '../../data/mockData';
+import { fetchBanners, fetchCombos, fetchOffers } from '../../api';
 
 interface HomeProps {
   categories: Category[];
@@ -41,15 +42,49 @@ export const Home: React.FC<HomeProps> = ({
   setDetailItem,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
-  const combos = FOOD_ITEMS.filter((item) => item.category === 'Combos');
-  const offers = FOOD_ITEMS.filter((item) => item.category === 'Offers');
+  const [banners, setBanners] = useState<Banner[]>([]);
+  const [combos, setCombos] = useState<any[]>([]);
+  const [offers, setOffers] = useState<FoodItem[]>([]);
+
+  React.useEffect(() => {
+    const loadBanners = async () => {
+      try {
+        const data = await fetchBanners();
+        setBanners(data);
+      } catch (err) {
+        console.error('Failed to load banners:', err);
+      }
+    };
+    
+    const loadCombos = async () => {
+      try {
+        const data = await fetchCombos();
+        setCombos(data);
+      } catch (err) {
+        console.error('Failed to load combos:', err);
+      }
+    };
+
+    const loadOffers = async () => {
+      try {
+        const data = await fetchOffers();
+        setOffers(data);
+      } catch (err) {
+        console.error('Failed to load offers:', err);
+      }
+    };
+
+    loadBanners();
+    loadCombos();
+    loadOffers();
+  }, []);
 
   return (
     <div className="flex flex-col bg-white min-h-screen pb-24">
 
       <div>
         {/* Hero Carousel */}
-        <HeroCarousel deals={HERO_DEALS} onOrderDeal={handleOrderDeal} />
+        <HeroCarousel banners={banners.filter(b => b.show)} />
       </div>
 
       {/* Offer/Game Toggle Layout */}

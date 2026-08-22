@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FoodItem, CartItem } from '../types';
+import { fetchComboDetail } from '../api';
 
 interface FoodDetailModalProps {
   item: FoodItem;
@@ -15,6 +16,17 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
   onAddToCart,
 }) => {
   const [quantity, setQuantity] = useState(1);
+  const [comboData, setComboData] = useState<any>(null);
+
+  useEffect(() => {
+    if (isOpen && item && item.category === 'Combos') {
+      fetchComboDetail(item.id)
+        .then(setComboData)
+        .catch(console.error);
+    } else {
+      setComboData(null);
+    }
+  }, [isOpen, item]);
 
   if (!isOpen) return null;
 
@@ -85,6 +97,27 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
             </div>
           </div>
           <p className="text-xs text-[#6B6B6B] font-medium">{subtitle}</p>
+
+          {comboData && comboData.foods && comboData.foods.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <h3 className="font-bold text-sm mb-3">Items included:</h3>
+              <ul className="space-y-3">
+                {comboData.foods.map((food: any, idx: number) => (
+                  <li key={idx} className="flex items-center gap-3">
+                    <img 
+                      src={food.image_url || 'https://via.placeholder.com/100'} 
+                      alt={food.name} 
+                      className="w-12 h-12 object-cover rounded shadow-sm"
+                    />
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold">{food.name}</p>
+                      <p className="text-xs text-gray-500">{food.category}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Fixed Footer */}

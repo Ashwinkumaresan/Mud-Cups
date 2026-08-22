@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { HeroDeal } from '../../types';
+import { Banner } from '../../types';
 
 interface HeroCarouselProps {
-  deals: HeroDeal[];
-  onOrderDeal: (deal: HeroDeal) => void;
+  banners: Banner[];
 }
 
-export const HeroCarousel: React.FC<HeroCarouselProps> = ({ deals, onOrderDeal }) => {
+export const HeroCarousel: React.FC<HeroCarouselProps> = ({ banners }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   useEffect(() => {
+    if (!banners || banners.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % deals.length);
+      setCurrentIndex((prev) => (prev + 1) % banners.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [deals.length]);
+  }, [banners]);
 
-  const currentDeal = deals[currentIndex];
+  if (!banners || banners.length === 0) return null;
+
+  const currentBanner = banners[currentIndex];
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % deals.length);
+    setCurrentIndex((prev) => (prev + 1) % banners.length);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + deals.length) % deals.length);
+    setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
   };
-
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const minSwipeDistance = 50;
 
@@ -63,27 +64,26 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ deals, onOrderDeal }
       {/* Background Image with Gradient Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-700 transform scale-100"
-        style={{ backgroundImage: `url('${currentDeal.image}')` }}
+        style={{ backgroundImage: `url('${currentBanner.image_url || currentBanner.image}')` }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
       </div>
 
       {/* Content Overlay */}
       <div className="absolute inset-x-0 bottom-0 p-5 md:p-8 pb-8 flex flex-col justify-end max-w-[80%] z-10 text-white">
-        <span className="inline-block bg-white text-[#1B4D3E] text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-sm mb-2 w-max tracking-wide">
-          {currentDeal.dealTag || 'Offer'}
-        </span>
+        {currentBanner.tag && (
+          <span className="inline-block bg-white text-[#1B4D3E] text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-sm mb-2 w-max tracking-wide">
+            {currentBanner.tag}
+          </span>
+        )}
         <h2 className="text-xl md:text-3xl font-extrabold mb-1 leading-tight text-white drop-shadow-sm">
-          {currentDeal.title}
+          {currentBanner.title}
         </h2>
-        <p className="text-xs md:text-sm text-white/90 mb-3 line-clamp-2">
-          {currentDeal.description}
-        </p>
       </div>
 
       {/* Carousel Dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
-        {deals.map((_, idx) => (
+        {banners.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}

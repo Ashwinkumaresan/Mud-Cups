@@ -7,7 +7,7 @@ interface LoginPageProps {
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -19,8 +19,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     setError('');
     setIsLoading(true);
     try {
-      const data = await loginUser({ email, password });
-      onLogin(data.token, data.user);
+      const data = await loginUser({ username, password });
+      onLogin(data.access, data.user);
       
       const searchParams = new URLSearchParams(location.search);
       const redirectUrl = searchParams.get('redirect');
@@ -56,14 +56,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Username</label>
               <input
-                type="email"
+                type="text"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E] focus:border-transparent transition-all"
-                placeholder="you@example.com"
+                placeholder="Your username"
               />
             </div>
             <div>

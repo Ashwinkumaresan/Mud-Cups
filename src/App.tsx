@@ -51,7 +51,11 @@ export default function App() {
   });
 
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    if (cartItems.length > 0) {
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    } else {
+      localStorage.removeItem('cartItems');
+    }
   }, [cartItems]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -61,15 +65,19 @@ export default function App() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const token = getCookie('mudcups_token');
-        if (token) {
-          try {
-            const userData = await fetchMe();
+        try {
+          const userData = await fetchMe();
+          if (userData && userData.user) {
             setUser(userData.user);
-          } catch (e) {
-            console.error('Failed to fetch user', e);
-            deleteCookie('mudcups_token');
+            const usr = userData.user;
+            if (usr && usr.first_name) {
+              localStorage.setItem('userName', `${usr.first_name} ${usr.last_name || ''}`.trim());
+            } else if (usr && usr.username) {
+              localStorage.setItem('userName', usr.username);
+            }
           }
+        } catch (e) {
+          console.error('User not logged in or failed to fetch user', e);
         }
         const [cats, items] = await Promise.all([fetchCategories(), fetchFoodItems()]);
         setCategories(cats);
@@ -382,6 +390,7 @@ export default function App() {
               onRemoveCartItem={handleRemoveCartItem}
               onOrderSuccess={(newOrder) => {
                 setCartItems([]);
+                localStorage.removeItem('cartItems');
                 setActiveOrders((prev) => [newOrder, ...prev]);
               }}
             />
@@ -397,8 +406,12 @@ export default function App() {
               element={
                 <LoginPage 
                   onLogin={(token, user) => {
-                    setCookie('mudcups_token', token);
                     setUser(user);
+                    if (user && user.first_name) {
+                      localStorage.setItem('userName', `${user.first_name} ${user.last_name || ''}`.trim());
+                    } else if (user && user.username) {
+                      localStorage.setItem('userName', user.username);
+                    }
                   }}
                 />
               } 
@@ -408,8 +421,12 @@ export default function App() {
               element={
                 <SignupPage 
                   onLogin={(token, user) => {
-                    setCookie('mudcups_token', token);
                     setUser(user);
+                    if (user && user.first_name) {
+                      localStorage.setItem('userName', `${user.first_name} ${user.last_name || ''}`.trim());
+                    } else if (user && user.username) {
+                      localStorage.setItem('userName', user.username);
+                    }
                   }}
                 />
               } 

@@ -24,15 +24,21 @@ export const CartPage: React.FC<CartPageProps> = ({
   const location = useLocation();
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
-  const [orderName, setOrderName] = useState(location.state?.customerName || user?.name || '');
+  const savedName = localStorage.getItem('userName');
+  const [orderName, setOrderName] = useState(
+    location.state?.customerName || user?.first_name || user?.username || savedName || ''
+  );
   const [tableNumber, setTableNumber] = useState(location.state?.tableNumber || '');
 
   // Listen for state changes if the modal navigates to /cart again
   React.useEffect(() => {
     if (location.state?.customerName) setOrderName(location.state.customerName);
-    else if (user?.name) setOrderName(user.name);
+    else if (user?.first_name) setOrderName(user.first_name);
+    else if (user?.username) setOrderName(user.username);
+    else if (savedName) setOrderName(savedName);
+    
     if (location.state?.tableNumber) setTableNumber(location.state.tableNumber);
-  }, [location.state, user]);
+  }, [location.state, user, savedName]);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
   const grandTotal = subtotal;
