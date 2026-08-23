@@ -23,7 +23,7 @@ const getHeaders = (isFormData = false) => {
   
   const token = getCookie('mudcups_token');
   if (token) {
-    headers['Authorization'] = `Token ${token}`;
+    headers['Authorization'] = `Bearer ${token}`;
   }
   
   return headers;
