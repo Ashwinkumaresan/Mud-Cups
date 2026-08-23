@@ -1,7 +1,7 @@
 import { Category, FoodItem, ActiveOrder, Combo, Banner } from '../types';
 import { getCookie } from '../utils/cookies';
-const API_BASE_URL = `http://${window.location.hostname}:8000/api`;
-// const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
+// const API_BASE_URL = `http://${window.location.hostname}:8000/api`;
+const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
 
 const apiFetch = async (url: string, options: RequestInit = {}) => {
   return fetch(url, {
