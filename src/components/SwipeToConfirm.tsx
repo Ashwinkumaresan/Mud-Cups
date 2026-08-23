@@ -71,12 +71,12 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
     }
   };
 
-  const r = Math.round(183 + (34 - 183) * swipeProgress);
-  const g = Math.round(18 + (197 - 18) * swipeProgress);
-  const b = Math.round(42 + (94 - 42) * swipeProgress);
+  const r = Math.round(252 + (27 - 252) * swipeProgress);
+  const g = Math.round(145 + (77 - 145) * swipeProgress);
+  const b = Math.round(35 + (62 - 35) * swipeProgress);
   const bgColor = `rgb(${r}, ${g}, ${b})`;
 
-  const thumbIconColor = swipeProgress >= 1 ? '#22c55e' : '#1B4D3E';
+  const thumbIconColor = swipeProgress >= 1 ? '#22c55e' : '#FC9123';
 
   return (
     <div className="w-full flex flex-col gap-2 relative">
@@ -107,7 +107,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
 
       <div className={`md:hidden fixed bottom-4 left-4 right-4 z-50 flex flex-col gap-2 animate-slideUp`}>
         <div 
-          className="relative w-full h-16 rounded overflow-hidden shadow-2xl flex items-center justify-center select-none"
+          className="relative w-full h-14 rounded overflow-hidden shadow-2xl flex items-center justify-center select-none"
           style={{ 
             backgroundColor: bgColor,
             touchAction: 'none',
@@ -130,7 +130,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
             ref={thumbRef}
           >
             <div 
-              className={`w-14 h-14 bg-white rounded flex items-center justify-center shadow-sm ${disabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}`}
+              className={`w-12 h-12 bg-white rounded flex items-center justify-center shadow-sm ${disabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}`}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -149,7 +149,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
             <span className="text-white font-bold text-sm absolute left-16" style={{ opacity: swipeProgress >= 1 ? 1 : 0, transition: 'opacity 0.3s' }}>
               Confirmed!
             </span>
-            <span className="text-white font-bold text-lg">
+            <span className="text-white font-bold text">
                ₹{amount.toFixed(2)}
             </span>
           </div>

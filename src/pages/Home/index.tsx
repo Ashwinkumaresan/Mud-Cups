@@ -94,7 +94,7 @@ export const Home: React.FC<HomeProps> = ({
         <SectionHeader title="Combos You Need to Try" />
         <HorizontalScrollList>
           {combos.map((combo) => (
-            <div key={combo.id} className="w-[calc(100vw-32px)] sm:w-[300px] shrink-0">
+            <div key={combo.id} className="w-[180px] sm:w-[260px] shrink-0">
               <FoodCard
                 item={combo}
                 isFavorite={favorites.includes(combo.id)}
@@ -114,7 +114,7 @@ export const Home: React.FC<HomeProps> = ({
         <SectionHeader title="Discover Your Best Offers" />
         <HorizontalScrollList>
           {offers.map((offer) => (
-            <div key={offer.id} className="w-[calc(100vw-32px)] sm:w-[300px] shrink-0">
+            <div key={offer.id} className="w-[180px] sm:w-[260px] shrink-0">
               <FoodCard
                 item={offer}
                 isFavorite={favorites.includes(offer.id)}
@@ -174,7 +174,7 @@ export const Home: React.FC<HomeProps> = ({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {filteredFoodItems.map((item) => (
               <FoodCard
                 key={item.id}

@@ -35,6 +35,12 @@ import { AdminSalesDetails } from './pages/AdminSalesDetails';
 import { NotFound } from './pages/NotFound';
 export default function App() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const [user, setUser] = useState<any>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
@@ -310,8 +316,6 @@ export default function App() {
 
   const totalCartCount = cartItems.reduce((acc, c) => acc + c.quantity, 0);
   const totalCartPrice = cartItems.reduce((acc, c) => acc + c.totalPrice, 0);
-
-  const location = useLocation();
 
   const isAdminRoute = location.pathname.startsWith('/admin');
   const showHeaderFooter = location.pathname !== '/cart' && location.pathname !== '/orders' && location.pathname !== '/login' && location.pathname !== '/signup' && !isAdminRoute;

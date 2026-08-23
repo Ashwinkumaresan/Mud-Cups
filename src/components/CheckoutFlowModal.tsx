@@ -62,17 +62,17 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
 
         {/* Progress Bar */}
         <div className="flex gap-2 mb-6 px-2 pt-2">
-          <div className={`h-1.5 flex-1 rounded-full ${step >= 1 ? 'bg-[#1B4D3E]' : 'bg-gray-100'}`}></div>
-          <div className={`h-1.5 flex-1 rounded-full ${step >= 2 ? 'bg-[#1B4D3E]' : 'bg-gray-100'}`}></div>
+          <div className={`h-1.5 flex-1 rounded-full ${step >= 1 ? 'bg-[#FC9123]' : 'bg-gray-100'}`}></div>
+          <div className={`h-1.5 flex-1 rounded-full ${step >= 2 ? 'bg-[#FC9123]' : 'bg-gray-100'}`}></div>
           {!onTableChange && (
-            <div className={`h-1.5 flex-1 rounded-full ${step >= 3 ? 'bg-[#1B4D3E]' : 'bg-gray-100'}`}></div>
+            <div className={`h-1.5 flex-1 rounded-full ${step >= 3 ? 'bg-[#FC9123]' : 'bg-gray-100'}`}></div>
           )}
         </div>
 
         {/* Step 1: Order Type */}
         {step === 1 && (
           <div className="animate-fadeIn">
-            <h3 className="text-2xl font-extrabold text-[#271717] mb-2 text-center">Where will you be eating?</h3>
+            <h3 className="text-xl font-extrabold text-[#271717] mb-2 text-center">Where will you be eating?</h3>
             <p className="text-gray-500 text-center mb-8">Select your dining preference</p>
             
             <div className="grid grid-cols-2 gap-4">
@@ -83,7 +83,7 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
                 <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-white group-hover:shadow-sm transition-all">
                   <span className="material-symbols-outlined text-4xl text-[#1B4D3E]">restaurant</span>
                 </div>
-                <span className="font-bold text-lg text-gray-800">Dine In</span>
+                <span className="font-bold md:text-lg text-sm text-gray-800">Dine In</span>
               </button>
               
               <button 
@@ -93,7 +93,7 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
                 <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-white group-hover:shadow-sm transition-all">
                   <span className="material-symbols-outlined text-4xl text-[#1B4D3E]">takeout_dining</span>
                 </div>
-                <span className="font-bold text-lg text-gray-800">Take Away</span>
+                <span className="font-bold md:text-lg text-sm text-gray-800">Take Away</span>
               </button>
             </div>
           </div>
@@ -108,7 +108,7 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
             >
               <span className="material-symbols-outlined text-sm">arrow_back</span> Back
             </button>
-            <h3 className="text-2xl font-extrabold text-[#271717] mb-2 text-center">Select your Table</h3>
+            <h3 className="text-xl font-extrabold text-[#271717] mb-2 text-center">Select your Table</h3>
             <p className="text-gray-500 text-center mb-8">Where are you seated?</p>
             
             <div className="grid grid-cols-4 gap-3">
@@ -116,7 +116,7 @@ export const CheckoutFlowModal: React.FC<CheckoutFlowModalProps> = ({ isOpen, on
                 <button
                   key={num}
                   onClick={() => handleTableSelect(num)}
-                  className="aspect-square flex items-center justify-center border-2 border-gray-100 rounded hover:border-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white font-bold text-xl text-gray-700 transition-all"
+                  className="aspect-square flex items-center justify-center border-2 border-gray-100 rounded hover:border-[#1B4D3E] hover:bg-[#1B4D3E] hover:text-white font-bold md:text-xl text-sm text-gray-700 transition-all"
                 >
                   {num}
                 </button>

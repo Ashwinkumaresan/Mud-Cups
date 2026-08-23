@@ -39,8 +39,8 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
           onChange={(e) => handleUpdateFilters({ searchQuery: e.target.value })}
           onFocus={() => setIsSearchFocused(true)}
           onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-          placeholder="Search for restaurants, dishes..."
-          className="w-full bg-[#f3f3f3] text-[#1C1C1C] placeholder-gray-500 rounded pl-12 pr-10 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]/30 transition-all shadow-inner"
+          placeholder="Search for dishes..."
+          className="w-full h-10 bg-[#f3f3f3] text-[#1C1C1C] placeholder-gray-500 rounded pl-12 pr-10 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]/30 transition-all shadow-inner"
         />
         {filters.searchQuery && (
           <button
@@ -79,10 +79,8 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
 
       {/* Veg Only Checkbox Label */}
       <label
-        className={`flex items-center justify-center gap-1.5 cursor-pointer border px-4 py-3.5 rounded shadow-sm transition-all text-sm font-semibold shrink-0 w-auto ${
-          filters.vegOnly
-            ? 'bg-green-50 border-green-600 text-green-700'
-            : 'bg-[#f3f3f3] border-gray-200 text-[#1C1C1C] hover:bg-gray-50'
+        className={`flex items-center justify-center h-10 gap-2 cursor-pointer border px-3 rounded shadow-sm transition-all text-sm font-semibold shrink-0 w-auto bg-white ${
+          filters.vegOnly ? 'border-green-500' : 'border-gray-200 hover:bg-gray-50'
         }`}
       >
         <input
@@ -91,10 +89,23 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
           onChange={(e) => handleUpdateFilters({ vegOnly: e.target.checked })}
           className="hidden"
         />
-        <span className={`material-symbols-outlined text-[18px] ${filters.vegOnly ? 'text-[#1B4D3E]' : 'text-gray-400'}`}>
-          {filters.vegOnly ? 'eco' : 'eco'}
+        {/* Card Veg Icon */}
+        <div className="flex-shrink-0 mt-0.5">
+          {filters.vegOnly ? (
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0.5" y="0.5" width="15" height="15" rx="3.5" stroke="#10B981" strokeWidth="2" />
+              <circle cx="8" cy="8" r="4" fill="#10B981" />
+            </svg>
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0.5" y="0.5" width="15" height="15" rx="3.5" stroke="#9CA3AF" strokeWidth="2" />
+              <circle cx="8" cy="8" r="4" fill="#9CA3AF" />
+            </svg>
+          )}
+        </div>
+        <span className={filters.vegOnly ? 'text-green-700' : 'text-gray-700'}>
+          Veg
         </span>
-        <span>Veg</span>
       </label>
     </div>
   );

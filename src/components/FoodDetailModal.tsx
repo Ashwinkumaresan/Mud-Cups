@@ -54,99 +54,109 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-end sm:items-center p-0 sm:p-4 animate-fadeIn bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex justify-center items-end p-0 animate-fadeIn bg-black/60 backdrop-blur-sm">
       <div
         className="absolute inset-0 cursor-pointer"
         onClick={onClose}
       />
 
-      <div className="bg-white w-full sm:max-w-lg rounded-t sm:rounded shadow-2xl relative z-10 flex flex-col max-h-[90vh] animate-slideUp overflow-hidden">
+      <div className="bg-white w-full rounded-t-2xl shadow-2xl relative z-10 flex flex-col sm:flex-row max-h-[90vh] sm:h-[400px] animate-slideUp overflow-hidden">
+        
+        {/* Close Button (Absolute to whole modal) */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 w-10 h-10 bg-white/90 sm:bg-gray-100 backdrop-blur sm:backdrop-blur-none rounded-full flex items-center justify-center text-gray-800 shadow-sm hover:bg-white sm:hover:bg-gray-200 transition-colors z-20"
+        >
+          <span className="material-symbols-outlined font-bold">close</span>
+        </button>
 
-        {/* Image Section */}
-        <div className="relative h-64 md:h-80 w-full bg-gray-100 shrink-0">
+        {/* Image Section (Top on mobile, Left on desktop) */}
+        <div className="relative h-64 sm:h-full sm:w-1/2 bg-gray-100 shrink-0">
           <img src={item.image || 'https://via.placeholder.com/400x300?text=No+Image'} alt={item.name} className="w-full h-full object-cover" />
 
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-gray-800 shadow-sm hover:bg-white transition-colors"
-          >
-            <span className="material-symbols-outlined font-bold">close</span>
-          </button>
-
-          <div className="absolute bottom-4 left-4 flex gap-2">
-            <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm backdrop-blur ${item.isVeg ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'
-              }`}>
-              {item.isVeg ? 'VEG' : 'NON-VEG'}
-            </span>
-          </div>
-        </div>
-
-        {/* Scrollable Content */}
-        <div className="overflow-y-auto p-5 sm:p-6 space-y-6">
-          <div className="flex justify-between items-start gap-4">
-            <h2 className="text-xl font-extrabold">{displayName}</h2>
-            <div className="text-right shrink-0">
-              <span className="font-extrabold text-xl text-[#1B4D3E]">
-                ₹{item.price.toFixed(2)}
-              </span>
-              {item.originalPrice && (
-                <div className="text-sm text-gray-400 line-through font-semibold mt-0.5">
-                  ₹{item.originalPrice.toFixed(2)}
-                </div>
+          <div className="absolute bottom-5 left-5 flex gap-2">
+            <div className="bg-white/90 backdrop-blur rounded p shadow-sm flex items-center justify-center">
+              {item.isVeg ? (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="15" height="15" rx="3.5" stroke="#10B981" strokeWidth="2" />
+                  <circle cx="8" cy="8" r="4" fill="#10B981" />
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="15" height="15" rx="3.5" stroke="#EF4444" strokeWidth="2" />
+                  <circle cx="8" cy="8" r="4" fill="#EF4444" />
+                </svg>
               )}
             </div>
           </div>
-          <p className="text-xs text-[#6B6B6B] font-medium">{subtitle}</p>
-
-          {comboData && comboData.foods && comboData.foods.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <h3 className="font-bold text-sm mb-3">Items included:</h3>
-              <ul className="space-y-3">
-                {comboData.foods.map((food: any, idx: number) => (
-                  <li key={idx} className="flex items-center gap-3">
-                    <img 
-                      src={food.image_url || 'https://via.placeholder.com/100'} 
-                      alt={food.name} 
-                      className="w-12 h-12 object-cover rounded shadow-sm"
-                    />
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold">{food.name}</p>
-                      <p className="text-xs text-gray-500">{food.category}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
 
-        {/* Fixed Footer */}
-        <div className="p-4 sm:p-5 border-t border-gray-100 bg-white shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] shrink-0 flex items-center gap-4">
-          <div className="flex items-center bg-gray-100 rounded p-1 shrink-0">
-            <button
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-10 h-10 rounded flex items-center justify-center text-gray-700 font-bold hover:bg-white hover:shadow-sm transition-all"
-            >
-              <span className="material-symbols-outlined">remove</span>
-            </button>
-            <span className="w-10 text-center font-bold">{quantity}</span>
-            <button
-              onClick={() => setQuantity(quantity + 1)}
-              className="w-10 h-10 rounded flex items-center justify-center text-gray-700 font-bold hover:bg-white hover:shadow-sm transition-all"
-            >
-              <span className="material-symbols-outlined">add</span>
-            </button>
+        {/* Right Section (Content + Footer) */}
+        <div className="flex flex-col sm:w-1/2 bg-white flex-1 overflow-hidden">
+          {/* Scrollable Content */}
+          <div className="overflow-y-auto p-5 sm:p-6 sm:pt-16 space-y-1 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <h2 className="text-xl font-extrabold">{displayName}</h2>
+             <div>
+                <span className="font-extrabold text-xl text-[#1B4D3E]">
+                  ₹{item.price.toFixed(2)}
+                </span>
+                {item.originalPrice && (
+                  <div className="text-sm text-gray-400 line-through font-semibold mt-0.5">
+                    ₹{item.originalPrice.toFixed(2)}
+                  </div>
+                )}
+              </div>
+            <p className="text-sm text-[#6B6B6B] font-medium leading-relaxed">{subtitle}</p>
+
+            {comboData && comboData.foods && comboData.foods.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <h3 className="font-bold text-sm mb-4">Items included:</h3>
+                <ul className="space-y-4">
+                  {comboData.foods.map((food: any, idx: number) => (
+                    <li key={idx} className="flex items-center gap-4">
+                      <img 
+                        src={food.image_url || 'https://via.placeholder.com/100'} 
+                        alt={food.name} 
+                        className="w-14 h-14 object-cover rounded-lg shadow-sm"
+                      />
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-gray-800">{food.name}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{food.category}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
-          <button
-            onClick={handleAddToCart}
-            className="flex-1 bg-[#1B4D3E] text-white py-3.5 px-6 rounded font-bold shadow-sm hover:bg-[#123329] transition-colors flex justify-between items-center"
-          >
-            <span>Add to Cart</span>
-            <span>₹{totalPrice.toFixed(2)}</span>
-          </button>
-        </div>
+          {/* Fixed Footer */}
+          <div className="p-4 sm:p-5 border-t border-gray-100 bg-white shrink-0 flex items-center gap-4">
+            <div className="flex items-center justify-between bg-white border-[3px] border-[#FC9123] text-[#FC9123] rounded-lg px-2 shrink-0 h-11 sm:h-12 w-[110px] sm:w-[120px]">
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-10 h-full flex items-center justify-center font-bold text-2xl active:scale-90 transition-transform"
+              >
+                -
+              </button>
+              <span className="w-8 sm:w-10 text-center font-bold text-lg">{quantity}</span>
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                className="w-10 h-full flex items-center justify-center font-bold text-2xl active:scale-90 transition-transform"
+              >
+                +
+              </button>
+            </div>
 
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 h-11 sm:h-12 bg-[#1B4D3E] text-sm text-white px-4 sm:px-6 rounded-lg font-bold shadow-sm hover:bg-[#123329] transition-colors flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-0.5 sm:gap-0"
+            >
+              <span>Add to Cart</span>
+              <span className="text-[10px] sm:text-base font-semibold sm:font-bold opacity-90 sm:opacity-100">₹{totalPrice.toFixed(2)}</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

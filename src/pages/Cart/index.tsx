@@ -130,14 +130,19 @@ export const CartPage: React.FC<CartPageProps> = ({
   if (isOrderPlaced) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-6 min-h-[60vh] animate-fadeIn">
-        <div className="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center text-[#22c55e] shadow-sm mb-4">
-          <span className="material-symbols-outlined text-6xl">check_circle</span>
-        </div>
-        <h2 className="text-3xl font-extrabold text-gray-800">Order Placed!</h2>
+        <div className="mb-8 relative mt-12">
+        <h1 
+          className="text-5xl text-[#1B4D3E]" 
+          style={{ fontFamily: '"Matemasie", cursive', lineHeight: '1.1' }}
+        >
+          Mud<br />Cups
+        </h1>
+      </div>
+        <h2 className="text-2xl font-extrabold text-gray-800">Order Placed!</h2>
         <p className="text-gray-500 text-base max-w-sm">
           Your order has been successfully placed and is now being prepared.
         </p>
-        <div className="flex gap-4 mt-6">
+        <div className="flex gap-4 mt-3">
           <button
             onClick={() => navigate('/orders')}
             className="bg-[#1B4D3E] text-white px-8 py-3 rounded font-bold hover:bg-[#123329] transition-all shadow-sm"
@@ -171,9 +176,9 @@ export const CartPage: React.FC<CartPageProps> = ({
   }
 
   return (
-    <div className="w-full pb-32 md:pb-12 animate-fadeIn space-y-6">
+    <div className="w-full md:pb-12 animate-fadeIn">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between sticky top-0 bg-white pb-4 pt-2 mt-0">
         <div className="flex items-center gap-3">
           <button 
             onClick={() => navigate('/')}
@@ -181,7 +186,7 @@ export const CartPage: React.FC<CartPageProps> = ({
           >
             <span className="material-symbols-outlined">arrow_back</span>
           </button>
-          <h1 className="text-2xl font-extrabold text-[#271717]">Your Cart</h1>
+          <h1 className="md:text-2xl text-xl font-extrabold text-[#271717]">Your Cart</h1>
         </div>
         <span className="bg-[#1B4D3E]/10 text-[#1B4D3E] px-3 py-1 rounded font-bold text-sm">
           {cartItems.length} Item{cartItems.length !== 1 ? 's' : ''}
@@ -338,7 +343,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                 />
                 <div className="flex-1">
                   <div className="font-bold text-gray-800">UPI / Online Payment</div>
-                  <div className="text-xs text-gray-500">Pay securely via Stripe</div>
+                  <div className="text-xs text-gray-500">Pay securely via Razorpay</div>
                 </div>
                 <span className="material-symbols-outlined text-gray-400">qr_code_scanner</span>
               </label>
@@ -373,7 +378,7 @@ export const CartPage: React.FC<CartPageProps> = ({
               disabled={!orderName.trim()}
               disabledMessage="Please enter your name to proceed"
               buttonText={paymentMethod === 'cash' ? 'Place Order (Pay at Counter)' : 'Proceed to Pay'}
-              swipeText={paymentMethod === 'cash' ? 'Swipe to order (Cash)' : 'Swipe to pay'}
+              swipeText={paymentMethod === 'cash' ? 'Swipe to order' : 'Swipe to pay'}
             />
           ) : (
             <button

@@ -43,13 +43,15 @@ export const Header: React.FC<HeaderProps> = ({
           {hasActiveOrders && (
             <Link
               to="/orders"
-              className="flex items-center justify-center text-white hover:bg-white/10 transition-all cursor-pointer p-2 rounded"
+              className="flex flex-col items-center justify-center text-white hover:bg-white/10 transition-all cursor-pointer px-2 py-1 rounded"
               title="My Orders"
             >
-              <span className="material-symbols-outlined text-2xl">receipt_long</span>
+              <span className="material-symbols-outlined text-2xl leading-none">room_service</span>
+              <span className="text-[10px] font-semibold">Orders</span>
             </Link>
           )}
           {user ? (
+            /*
             <button
               onClick={handleLogout}
               className="flex items-center gap-1.5 text-[#1B4D3E] bg-white hover:bg-gray-100 transition-all font-semibold text-xs md:text-sm cursor-pointer px-4 py-1.5 rounded shadow-sm"
@@ -58,6 +60,8 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="material-symbols-outlined text-lg text-[#1B4D3E]">logout</span>
               <span className="font-extrabold">{user.name}</span>
             </button>
+            */
+            null
           ) : (
             <button
               onClick={onOpenAuth}
