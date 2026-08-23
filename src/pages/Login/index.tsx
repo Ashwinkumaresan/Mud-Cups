@@ -20,7 +20,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     setIsLoading(true);
     try {
       const data = await loginUser({ username, password });
-      onLogin(data.access, data.user);
+      onLogin(data.access_token, data.user);
       
       const searchParams = new URLSearchParams(location.search);
       const redirectUrl = searchParams.get('redirect');

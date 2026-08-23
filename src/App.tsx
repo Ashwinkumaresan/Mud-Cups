@@ -11,7 +11,6 @@ import {
   Category,
 } from './types';
 import { fetchCategories, fetchFoodItems, fetchActiveOrders, fetchMyOrders } from './api';
-import { HERO_DEALS, MOCK_USER } from './data/mockData';
 import { Header } from './components/Header';
 import { FoodDetailModal } from './components/FoodDetailModal';
 import { CheckoutFlowModal } from './components/CheckoutFlowModal';
@@ -37,7 +36,7 @@ import { NotFound } from './pages/NotFound';
 export default function App() {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
-  const [favorites, setFavorites] = useState<string[]>(['item-1', 'item-2']);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('cartItems');
     if (saved) {
@@ -92,31 +91,29 @@ export default function App() {
     loadData();
   }, []);
 
+  const loadOrders = async () => {
+    if (!user) return;
+    setIsOrdersLoading(true);
+    try {
+      const orders = await fetchMyOrders();
+      setActiveOrders(orders);
+    } catch (err) {
+      console.error("Failed to sync orders");
+    } finally {
+      setIsOrdersLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const pollOrders = async () => {
-      try {
-        const orders = await fetchMyOrders();
-        setActiveOrders(orders);
-      } catch (err) {
-        console.error("Failed to sync orders");
-      } finally {
-        setIsOrdersLoading(false);
-      }
-    };
-    
     if (user) {
-      pollOrders();
-      const interval = setInterval(pollOrders, 10000);
-      return () => clearInterval(interval);
+      loadOrders();
     } else {
       setActiveOrders([]);
       setIsOrdersLoading(false);
     }
   }, [user]);
 
-  const [selectedAddress, setSelectedAddress] = useState<UserAddress>(
-    MOCK_USER.addresses[0]
-  );
+  const [selectedAddress, setSelectedAddress] = useState<UserAddress | null>(null);
 
   // Removed Session ID state logic
 
@@ -399,6 +396,7 @@ export default function App() {
               <OrdersPage
                 activeOrders={activeOrders}
                 isLoading={isOrdersLoading}
+                refreshOrders={loadOrders}
               />
             } />
             <Route 
@@ -406,6 +404,7 @@ export default function App() {
               element={
                 <LoginPage 
                   onLogin={(token, user) => {
+                    setCookie('mudcups_token', token);
                     setUser(user);
                     if (user && user.first_name) {
                       localStorage.setItem('userName', `${user.first_name} ${user.last_name || ''}`.trim());
@@ -421,6 +420,7 @@ export default function App() {
               element={
                 <SignupPage 
                   onLogin={(token, user) => {
+                    setCookie('mudcups_token', token);
                     setUser(user);
                     if (user && user.first_name) {
                       localStorage.setItem('userName', `${user.first_name} ${user.last_name || ''}`.trim());

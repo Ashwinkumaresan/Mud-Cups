@@ -1,7 +1,7 @@
 import { Category, FoodItem, ActiveOrder, Combo, Banner } from '../types';
 import { getCookie } from '../utils/cookies';
-// const API_BASE_URL = `http://${window.location.hostname}:8000/api`;
-const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
+const API_BASE_URL = `http://${window.location.hostname}:8000/api`;
+// const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
 
 const apiFetch = async (url: string, options: RequestInit = {}) => {
   return fetch(url, {
@@ -317,3 +317,31 @@ export const fetchMe = async () => {
   }
   return response.json();
 };
+
+// Payment
+export const createRazorpayOrder = async (orderId: string) => {
+  const response = await apiFetch(`${API_BASE_URL}/payment/create-order/`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ order_id: orderId }),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to create Razorpay order');
+  }
+  return response.json();
+};
+
+export const verifyRazorpayPayment = async (data: any) => {
+  const response = await apiFetch(`${API_BASE_URL}/payment/verify/`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to verify payment');
+  }
+  return response.json();
+};
+

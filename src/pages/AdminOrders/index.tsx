@@ -119,9 +119,16 @@ export const AdminOrdersPage: React.FC = () => {
                     <span className="material-symbols-outlined text-gray-400 text-sm">person</span>
                     <span className="font-bold text-[#271717] text-sm">{order.customerName}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-gray-400 text-sm">table_restaurant</span>
-                    <span className="font-bold text-[#271717] text-sm">Table {order.tableNumber}</span>
+                  <div className="flex flex-col gap-1 items-end">
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-gray-400 text-sm">table_restaurant</span>
+                      <span className="font-bold text-[#271717] text-sm">Table {order.tableNumber}</span>
+                    </div>
+                    {order.isPaid && (
+                      <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-bold">
+                        Paid
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -129,15 +136,17 @@ export const AdminOrdersPage: React.FC = () => {
                 <div className="flex-1 mb-6">
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Items</h4>
                   <div className="space-y-3">
-                    {order.items.map((cartItem, i) => (
+                    {order.items.map((cartItem, i) => {
+                      const itemObj = cartItem.item || cartItem;
+                      return (
                       <div key={i} className="flex justify-between items-start">
                         <div className="flex gap-3">
                           <span className="font-bold text-[#1B4D3E] text-sm">{cartItem.quantity}x</span>
-                          <span className="font-bold text-[#271717] text-sm leading-tight">{cartItem.item.name}</span>
+                          <span className="font-bold text-[#271717] text-sm leading-tight">{itemObj.name || 'Unknown Item'}</span>
                         </div>
-                        <span className="font-bold text-gray-500 text-sm">₹{cartItem.totalPrice.toFixed(2)}</span>
+                        <span className="font-bold text-gray-500 text-sm">₹{(cartItem.totalPrice || (itemObj.price * cartItem.quantity)).toFixed(2)}</span>
                       </div>
-                    ))}
+                    )})}
                   </div>
                 </div>
 

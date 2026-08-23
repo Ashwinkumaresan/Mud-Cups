@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ActiveOrder, CartItem } from '../../types';
 import { SwipeToConfirm } from '../../components/SwipeToConfirm';
-import { createOrder } from '../../api';
+import { createOrder, createRazorpayOrder, verifyRazorpayPayment } from '../../api';
 import { CheckoutFlowModal } from '../../components/CheckoutFlowModal';
 
 interface CartPageProps {
@@ -29,6 +29,7 @@ export const CartPage: React.FC<CartPageProps> = ({
     location.state?.customerName || user?.first_name || user?.username || savedName || ''
   );
   const [tableNumber, setTableNumber] = useState(location.state?.tableNumber || '');
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'upi'>('cash');
 
   // Listen for state changes if the modal navigates to /cart again
   React.useEffect(() => {
@@ -45,6 +46,13 @@ export const CartPage: React.FC<CartPageProps> = ({
 
   const handlePlaceOrder = async () => {
     if (cartItems.length === 0) return;
+    
+    if (!user) {
+      alert("Please login to place an order.");
+      navigate('/login?redirect=/cart');
+      return;
+    }
+
     if (!orderName.trim()) return;
 
     try {
@@ -59,10 +67,60 @@ export const CartPage: React.FC<CartPageProps> = ({
         placedAt: new Date(),
       };
 
-      await createOrder(newOrder);
+      const backendOrder = await createOrder(newOrder);
+      const actualOrderId = backendOrder.order_id || backendOrder.orderId;
+      
+      // Update newOrder with the actual ID returned from backend for the success screen
+      const finalOrder = { ...newOrder, orderId: actualOrderId };
 
-      onOrderSuccess(newOrder);
-      setIsOrderPlaced(true);
+      if (paymentMethod === 'upi') {
+        try {
+          const rzpOrderData = await createRazorpayOrder(actualOrderId);
+          
+          const options = {
+            key: rzpOrderData.key_id,
+            amount: rzpOrderData.amount,
+            currency: rzpOrderData.currency,
+            name: "Mud Cups",
+            description: `Order ${actualOrderId}`,
+            order_id: rzpOrderData.razorpay_order_id,
+            handler: async function (response: any) {
+              try {
+                await verifyRazorpayPayment({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  order_id: actualOrderId
+                });
+                onOrderSuccess(finalOrder);
+                setIsOrderPlaced(true);
+              } catch (verifyError) {
+                console.error("Payment verification failed", verifyError);
+                alert("Payment verification failed. If money was deducted, it will be refunded.");
+              }
+            },
+            prefill: {
+              name: orderName.trim(),
+            },
+            theme: {
+              color: "#1B4D3E"
+            }
+          };
+
+          const rzp = new (window as any).Razorpay(options);
+          rzp.on('payment.failed', function (response: any) {
+            console.error("Payment failed", response.error);
+            alert("Payment failed: " + response.error.description);
+          });
+          rzp.open();
+        } catch (rzpError) {
+          console.error("Failed to initialize Razorpay", rzpError);
+          alert("Could not start payment gateway. Please try again.");
+        }
+      } else {
+        onOrderSuccess(finalOrder);
+        setIsOrderPlaced(true);
+      }
     } catch (error) {
       console.error('Failed to place order:', error);
       alert('Failed to place order. Please try again.');
@@ -188,17 +246,19 @@ export const CartPage: React.FC<CartPageProps> = ({
               </h2>
             </div>
             <div className="p-4 space-y-4">
-              {cartItems.map((cartItem, idx) => (
+              {cartItems.map((cartItem, idx) => {
+                const itemObj = cartItem.item || cartItem;
+                return (
                 <div key={idx} className="flex gap-4 p-3 rounded hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
                   <img
-                    src={cartItem.item.image || 'https://via.placeholder.com/100x100?text=No+Image'}
-                    alt={cartItem.item.name}
+                    src={itemObj.image || 'https://via.placeholder.com/100x100?text=No+Image'}
+                    alt={itemObj.name || 'Item'}
                     className="w-20 h-20 rounded object-cover shadow-xs"
                   />
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start">
-                        <h4 className="font-bold text-[#271717] line-clamp-1">{cartItem.item.name}</h4>
+                        <h4 className="font-bold text-[#271717] line-clamp-1">{itemObj.name || 'Unknown Item'}</h4>
                         <button
                           onClick={() => onRemoveCartItem(idx)}
                           className="text-gray-400 hover:text-red-500 transition-colors p-1"
@@ -228,12 +288,63 @@ export const CartPage: React.FC<CartPageProps> = ({
                     </div>
                   </div>
                 </div>
-              ))}
+              )})}
             </div>
           </div>
         </div>
 
         <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+          {/* Payment Method */}
+          <div className="bg-white rounded shadow-sm border border-gray-100 overflow-hidden">
+            <div className="p-4 bg-gray-50 border-b border-gray-100">
+              <h2 className="font-bold text-gray-800 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#1B4D3E]">payments</span>
+                Payment Method
+              </h2>
+            </div>
+            <div className="p-5 space-y-3">
+              <label 
+                className={`flex items-center gap-3 p-3 border rounded cursor-pointer transition-all ${
+                  paymentMethod === 'cash' ? 'border-[#1B4D3E] bg-[#1B4D3E]/5' : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <input 
+                  type="radio" 
+                  name="paymentMethod" 
+                  value="cash"
+                  checked={paymentMethod === 'cash'}
+                  onChange={() => setPaymentMethod('cash')}
+                  className="w-4 h-4 text-[#1B4D3E] focus:ring-[#1B4D3E] cursor-pointer"
+                />
+                <div className="flex-1">
+                  <div className="font-bold text-gray-800">Cash / Pay at Counter</div>
+                  <div className="text-xs text-gray-500">Pay directly when picking up your order</div>
+                </div>
+                <span className="material-symbols-outlined text-gray-400">store</span>
+              </label>
+
+              <label 
+                className={`flex items-center gap-3 p-3 border rounded cursor-pointer transition-all ${
+                  paymentMethod === 'upi' ? 'border-[#1B4D3E] bg-[#1B4D3E]/5' : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <input 
+                  type="radio" 
+                  name="paymentMethod" 
+                  value="upi"
+                  checked={paymentMethod === 'upi'}
+                  onChange={() => setPaymentMethod('upi')}
+                  className="w-4 h-4 text-[#1B4D3E] focus:ring-[#1B4D3E] cursor-pointer"
+                />
+                <div className="flex-1">
+                  <div className="font-bold text-gray-800">UPI / Online Payment</div>
+                  <div className="text-xs text-gray-500">Pay securely via Stripe</div>
+                </div>
+                <span className="material-symbols-outlined text-gray-400">qr_code_scanner</span>
+              </label>
+            </div>
+          </div>
+
           {/* Bill Details */}
           <div className="bg-white rounded shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-4 bg-gray-50 border-b border-gray-100">
@@ -261,6 +372,8 @@ export const CartPage: React.FC<CartPageProps> = ({
               amount={grandTotal}
               disabled={!orderName.trim()}
               disabledMessage="Please enter your name to proceed"
+              buttonText={paymentMethod === 'cash' ? 'Place Order (Pay at Counter)' : 'Proceed to Pay'}
+              swipeText={paymentMethod === 'cash' ? 'Swipe to order (Cash)' : 'Swipe to pay'}
             />
           ) : (
             <button

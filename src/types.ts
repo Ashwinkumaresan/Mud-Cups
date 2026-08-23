@@ -82,6 +82,7 @@ export interface ActiveOrder {
   totalAmount: number;
   finalAmount: number;
   placedAt: Date;
+  isPaid?: boolean;
 }
 
 export type ActiveTab = 'explore' | 'offers' | 'cuisines' | 'favorites';

@@ -7,7 +7,6 @@ import { SearchFilterBar } from '../../components/Home/SearchFilterBar';
 import { OfferGameToggle } from '../../components/Home/OfferGameToggle';
 import { HorizontalScrollList } from '../../components/Home/HorizontalScrollList';
 import { SectionHeader } from '../../components/Home/SectionHeader';
-import { HERO_DEALS, FOOD_ITEMS } from '../../data/mockData';
 import { fetchBanners, fetchCombos, fetchOffers } from '../../api';
 
 interface HomeProps {

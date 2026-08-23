@@ -6,13 +6,13 @@ export const NotFound: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] bg-white px-4 text-center">
-      <div className="mb-8 relative">
-        <span className="material-symbols-outlined text-[#1B4D3E] opacity-10" style={{ fontSize: '180px' }}>
-          restaurant_menu
-        </span>
-        <span className="material-symbols-outlined text-[#1B4D3E] absolute inset-0 m-auto flex items-center justify-center text-6xl">
-          search_off
-        </span>
+      <div className="mb-8 relative mt-12">
+        <h1 
+          className="text-5xl text-[#1B4D3E]" 
+          style={{ fontFamily: '"Matemasie", cursive', lineHeight: '1.1' }}
+        >
+          Mud<br />Cups
+        </h1>
       </div>
       
       <h1 className="text-4xl font-black text-[#1B4D3E] mb-3">

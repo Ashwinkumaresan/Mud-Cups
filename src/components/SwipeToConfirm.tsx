@@ -6,9 +6,11 @@ interface SwipeToConfirmProps {
   disabled?: boolean;
   disabledMessage?: string;
   onDisabledClick?: () => void;
+  buttonText?: string;
+  swipeText?: string;
 }
 
-export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amount, disabled = false, disabledMessage, onDisabledClick }) => {
+export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amount, disabled = false, disabledMessage, onDisabledClick, buttonText, swipeText }) => {
   const [swipeProgress, setSwipeProgress] = useState(0);
   const [deltaX, setDeltaX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -90,7 +92,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
         className={`hidden lg:flex w-full relative overflow-hidden bg-[#1B4D3E] hover:bg-[#123329] active:scale-95 cursor-pointer text-white py-4 rounded font-bold transition-all shadow-sm items-center justify-between px-6`}
       >
         <span className="flex items-center gap-2">
-          Place Order
+          {buttonText || 'Place Order'}
           <span className="material-symbols-outlined">check_circle</span>
         </span>
         <span>₹{amount.toFixed(2)}</span>
@@ -142,7 +144,7 @@ export const SwipeToConfirm: React.FC<SwipeToConfirmProps> = ({ onConfirm, amoun
 
           <div className="absolute inset-0 flex items-center justify-between pl-16 pr-6 pointer-events-none z-10 transition-opacity">
             <span className="text-white font-bold text-sm" style={{ opacity: swipeProgress >= 1 ? 0 : 1 - swipeProgress }}>
-              Swipe to confirm
+              {swipeText || 'Swipe to confirm'}
             </span>
             <span className="text-white font-bold text-sm absolute left-16" style={{ opacity: swipeProgress >= 1 ? 1 : 0, transition: 'opacity 0.3s' }}>
               Confirmed!

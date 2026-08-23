@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActiveOrder } from '../../types';
 
 interface OrdersPageProps {
   activeOrders: ActiveOrder[];
   isLoading?: boolean;
+  refreshOrders?: () => void;
 }
 
-export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading }) => {
+export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading, refreshOrders }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (refreshOrders) {
+      refreshOrders();
+    }
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto w-full pb-12 animate-fadeIn space-y-6">
@@ -53,6 +60,11 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
                     <span className="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full font-semibold">
                       Table: {order.tableNumber}
                     </span>
+                    {order.isPaid && (
+                      <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-bold">
+                        Paid
+                      </span>
+                    )}
                   </div>
                   <span className="text-sm text-gray-500">
                     {order.placedAt.toLocaleDateString()} at {order.placedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -67,24 +79,26 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ activeOrders, isLoading 
               <div className="border-t border-gray-100 pt-3 space-y-3">
                 <h4 className="font-bold text-gray-800 text-sm">Order Items</h4>
                 <div className="space-y-3">
-                  {order.items.map((cartItem, i) => (
+                  {order.items.map((cartItem, i) => {
+                    const itemObj = cartItem.item || cartItem;
+                    return (
                     <div key={i} className="flex gap-3 items-start">
                       <img
-                        src={cartItem.item.image || 'https://via.placeholder.com/100x100?text=No+Image'}
-                        alt={cartItem.item.name}
+                        src={itemObj.image || 'https://via.placeholder.com/100x100?text=No+Image'}
+                        alt={itemObj.name || 'Item'}
                         className="w-12 h-12 rounded object-cover shadow-xs"
                       />
                       <div className="flex-1">
                         <div className="flex justify-between">
-                          <span className="font-semibold text-[#271717] text-sm line-clamp-1">{cartItem.item.name}</span>
-                          <span className="font-bold text-[#1B4D3E] text-sm">₹{cartItem.totalPrice.toFixed(2)}</span>
+                          <span className="font-semibold text-[#271717] text-sm line-clamp-1">{itemObj.name || 'Unknown Item'}</span>
+                          <span className="font-bold text-[#1B4D3E] text-sm">₹{(cartItem.totalPrice || (itemObj.price * cartItem.quantity)).toFixed(2)}</span>
                         </div>
                         <div className="text-xs text-gray-500">
                           Qty: {cartItem.quantity}
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               </div>
 
