@@ -56,7 +56,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ banners }) => {
 
   return (
     <section 
-      className="relative w-full h-[320px] md:h-[400px] rounded-[16px] overflow-hidden bg-white shadow-sm mx-auto group transition-all mt-2 mb-2"
+      className="relative w-full aspect-video rounded-[16px] overflow-hidden bg-gray-100 shadow-sm mx-auto group transition-all mt-2 mb-2 max-w-6xl"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEndHandler}
@@ -70,13 +70,13 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ banners }) => {
       </div>
 
       {/* Content Overlay */}
-      <div className="absolute inset-x-0 bottom-0 p-5 md:p-8 pb-8 flex flex-col justify-end max-w-[80%] z-10 text-white">
+      <div className="absolute inset-x-0 bottom-0 p-3 pb-6 md:p-8 md:pb-8 flex flex-col justify-end max-w-[90%] md:max-w-[80%] z-10 text-white">
         {currentBanner.tag && (
-          <span className="inline-block bg-white text-[#1B4D3E] text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-sm mb-2 w-max tracking-wide">
+          <span className="inline-block bg-white text-[#1B4D3E] text-[8px] md:text-[10px] uppercase font-bold px-1.5 md:px-2.5 py-0.5 rounded-sm mb-1 md:mb-2 w-max tracking-wide">
             {currentBanner.tag}
           </span>
         )}
-        <h2 className="text-xl md:text-3xl font-extrabold mb-1 leading-tight text-white drop-shadow-sm">
+        <h2 className="text-sm sm:text-lg md:text-3xl font-extrabold mb-1 leading-tight text-white drop-shadow-sm">
           {currentBanner.title}
         </h2>
       </div>

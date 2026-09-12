@@ -11,6 +11,7 @@ interface CartPageProps {
   onUpdateCartQuantity: (index: number, delta: number) => void;
   onRemoveCartItem: (index: number) => void;
   onOrderSuccess: (order: ActiveOrder) => void;
+  onOpenAuth: () => void;
 }
 
 export const CartPage: React.FC<CartPageProps> = ({
@@ -19,14 +20,21 @@ export const CartPage: React.FC<CartPageProps> = ({
   onUpdateCartQuantity,
   onRemoveCartItem,
   onOrderSuccess,
+  onOpenAuth,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const savedName = localStorage.getItem('userName');
+  const getFullName = (u: any) => {
+    if (u?.name) return u.name;
+    if (u?.first_name && u?.last_name) return `${u.first_name} ${u.last_name}`;
+    return u?.first_name || u?.username;
+  };
+
   const [orderName, setOrderName] = useState(
-    location.state?.customerName || user?.first_name || user?.username || savedName || ''
+    location.state?.customerName || getFullName(user) || savedName || ''
   );
   const [tableNumber, setTableNumber] = useState(location.state?.tableNumber || '');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'upi'>('cash');
@@ -34,13 +42,13 @@ export const CartPage: React.FC<CartPageProps> = ({
   // Listen for state changes if the modal navigates to /cart again
   React.useEffect(() => {
     if (location.state?.customerName) setOrderName(location.state.customerName);
-    else if (user?.first_name) setOrderName(user.first_name);
-    else if (user?.username) setOrderName(user.username);
+    else if (getFullName(user)) setOrderName(getFullName(user));
     else if (savedName) setOrderName(savedName);
     
     if (location.state?.tableNumber) setTableNumber(location.state.tableNumber);
   }, [location.state, user, savedName]);
 
+  const isDineIn = Boolean(tableNumber && tableNumber.toLowerCase() !== 'takeaway');
   const subtotal = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
   const grandTotal = subtotal;
 
@@ -49,7 +57,7 @@ export const CartPage: React.FC<CartPageProps> = ({
     
     if (!user) {
       alert("Please login to place an order.");
-      navigate('/login?redirect=/cart');
+      onOpenAuth();
       return;
     }
 
@@ -127,25 +135,73 @@ export const CartPage: React.FC<CartPageProps> = ({
     }
   };
 
+  const handleShareStory = async () => {
+    try {
+      if (!navigator.share) {
+        alert("Sharing is not supported on this device/browser.");
+        return;
+      }
+      
+      const response = await fetch('/Insta-story.png');
+      const blob = await response.blob();
+      const file = new File([blob], 'MudCupsInstaStory.png', { type: blob.type });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'Mud Cups',
+          text: 'Just ordered from Mud Cups!'
+        });
+      } else {
+        // Fallback for browsers that support share but not files
+        await navigator.share({
+          title: 'Mud Cups',
+          text: 'Just ordered from Mud Cups!',
+          url: window.location.origin
+        });
+      }
+    } catch (err) {
+      console.error("Error sharing:", err);
+    }
+  };
+
   if (isOrderPlaced) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-6 min-h-[60vh] animate-fadeIn">
-        <div className="mb-8 relative mt-12">
-        <h1 
-          className="text-5xl text-[#1B4D3E]" 
-          style={{ fontFamily: '"Matemasie", cursive', lineHeight: '1.1' }}
-        >
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 text-center space-y-3 min-h-[60vh] h-full max-h-[100dvh] overflow-y-auto animate-fadeIn">
+        <div className="relative mt-2">
+          <h1 
+            className="text-4xl sm:text-5xl text-[#1B4D3E]" 
+            style={{ fontFamily: '"Matemasie", cursive', lineHeight: '1.1' }}
+          >
           Mud<br />Cups
         </h1>
       </div>
-        <h2 className="text-2xl font-extrabold text-gray-800">Order Placed!</h2>
-        <p className="text-gray-500 text-base max-w-sm">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-gray-800">Order Placed!</h2>
+        <p className="text-gray-500 text-sm max-w-sm mb-2">
           Your order has been successfully placed and is now being prepared.
         </p>
-        <div className="flex gap-4 mt-3">
+
+        {/* Story Section */}
+        <div className="bg-white rounded shadow-sm border border-gray-100 p-3 max-w-sm w-full mx-auto space-y-3 flex flex-col items-center">
+          <img 
+            src="/Insta-story.png" 
+            alt="Share on Story" 
+            className="h-[30vh] sm:h-[35vh] w-auto max-w-full rounded-lg shadow-sm cursor-pointer object-contain hover:scale-105 transition-transform" 
+            onClick={handleShareStory}
+          />
+          <button
+            onClick={handleShareStory}
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white px-6 py-2.5 rounded-full font-bold hover:opacity-90 transition-opacity shadow-sm w-full"
+          >
+            <span className="material-symbols-outlined text-sm">share</span>
+            Share Us on Your story
+          </button>
+        </div>
+
+        <div className="flex gap-4 mt-2">
           <button
             onClick={() => navigate('/orders')}
-            className="bg-[#1B4D3E] text-white px-8 py-3 rounded font-bold hover:bg-[#123329] transition-all shadow-sm"
+            className="bg-[#1B4D3E] text-white px-8 py-2.5 rounded font-bold hover:bg-[#123329] transition-all shadow-sm"
           >
             View My Orders
           </button>
@@ -164,13 +220,13 @@ export const CartPage: React.FC<CartPageProps> = ({
         <p className="text-gray-500 text-sm max-w-sm">
           Looks like you haven't added anything to your cart yet. Let's explore some delicious food!
         </p>
-        <button
-          onClick={() => navigate('/')}
-          className="mt-4 bg-[#1B4D3E] text-white px-6 py-3 rounded font-bold hover:bg-[#123329] transition-all shadow-sm flex items-center gap-2"
-        >
-          <span className="material-symbols-outlined text-lg">restaurant_menu</span>
-          Browse Menu
-        </button>
+            <button
+              onClick={() => navigate('/')}
+              className="bg-[#1B4D3E] text-white px-8 py-3 rounded-full font-bold hover:bg-[#123329] active:scale-95 transition-all shadow-md flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-lg">restaurant_menu</span>
+              Browse Menu
+            </button>
       </div>
     );
   }
@@ -322,8 +378,14 @@ export const CartPage: React.FC<CartPageProps> = ({
                   className="w-4 h-4 text-[#1B4D3E] focus:ring-[#1B4D3E] cursor-pointer"
                 />
                 <div className="flex-1">
-                  <div className="font-bold text-gray-800">Cash / Pay at Counter</div>
-                  <div className="text-xs text-gray-500">Pay directly when picking up your order</div>
+                  <div className="font-bold text-gray-800">
+                    {isDineIn ? 'Pay Later' : 'Cash / Pay at Counter'}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {isDineIn 
+                      ? 'Continue ordering and pay for everything at once on the Orders page' 
+                      : 'Pay directly when picking up your order'}
+                  </div>
                 </div>
                 <span className="material-symbols-outlined text-gray-400">store</span>
               </label>
@@ -377,13 +439,13 @@ export const CartPage: React.FC<CartPageProps> = ({
               amount={grandTotal}
               disabled={!orderName.trim()}
               disabledMessage="Please enter your name to proceed"
-              buttonText={paymentMethod === 'cash' ? 'Place Order (Pay at Counter)' : 'Proceed to Pay'}
+              buttonText={paymentMethod === 'cash' ? (isDineIn ? 'Place Order' : 'Place Order (Pay at Counter)') : 'Proceed to Pay'}
               swipeText={paymentMethod === 'cash' ? 'Swipe to order' : 'Swipe to pay'}
             />
           ) : (
             <button
               className="w-full bg-[#1B4D3E] text-white py-4 rounded font-bold text-lg hover:bg-[#123329] transition-colors shadow-sm"
-              onClick={() => navigate('/login?redirect=/cart')}
+              onClick={() => onOpenAuth()}
             >
               Login to Checkout
             </button>

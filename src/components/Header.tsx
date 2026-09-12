@@ -23,6 +23,24 @@ export const Header: React.FC<HeaderProps> = ({
     deleteCookie('mudcups_token');
     window.location.reload();
   };
+  const handleLoginClick = () => {
+    // Preserve cart items
+    const savedCart = localStorage.getItem('cartItems');
+    
+    // Clear all local storage
+    localStorage.clear();
+    
+    // Restore cart items
+    if (savedCart) {
+      localStorage.setItem('cartItems', savedCart);
+    }
+    
+    // Clear auth cookie
+    deleteCookie('mudcups_token');
+    
+    // Proceed to open auth
+    onOpenAuth();
+  };
   return (
     <>
       <header className="bg-[#1B4D3E] w-full relative z-50 pt-2">
@@ -47,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
               title="My Orders"
             >
               <span className="material-symbols-outlined text-2xl leading-none">room_service</span>
-              <span className="text-[10px] font-semibold">Orders</span>
+              <span className="text-[10px] font-semibold mt-0.5">Orders</span>
             </Link>
           )}
           {user ? (
@@ -64,7 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
             null
           ) : (
             <button
-              onClick={onOpenAuth}
+              onClick={handleLoginClick}
               className="flex items-center gap-1.5 text-[#1B4D3E] bg-white hover:bg-gray-100 transition-all font-semibold text-xs md:text-sm cursor-pointer px-5 py-1.5 rounded shadow-sm"
               title="Login"
             >

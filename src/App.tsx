@@ -15,10 +15,10 @@ import { Header } from './components/Header';
 import { FoodDetailModal } from './components/FoodDetailModal';
 import { CheckoutFlowModal } from './components/CheckoutFlowModal';
 import { Footer } from './components/Footer';
-import { LoginPage } from './pages/Login';
-import { SignupPage } from './pages/Signup';
-import { fetchMe } from './api';
+import { fetchMe, googleLogin as apiGoogleLogin } from './api';
+import { AuthModal } from './components/AuthModal';
 import { getCookie, setCookie, deleteCookie } from './utils/cookies';
+import { useGoogleOneTapLogin } from '@react-oauth/google';
 import { Home } from './pages/Home';
 import { OffersPage } from './pages/Offers';
 import { CombosPage } from './pages/Combos';
@@ -33,6 +33,26 @@ import { AdminAddCombo } from './pages/AdminAddCombo';
 import { AdminAddOffer } from './pages/AdminAddOffer';
 import { AdminSalesDetails } from './pages/AdminSalesDetails';
 import { NotFound } from './pages/NotFound';
+
+function GoogleOneTapPrompt({ onLoginSuccess }: { onLoginSuccess: (res: any) => void }) {
+  useGoogleOneTapLogin({
+    onSuccess: onLoginSuccess,
+    auto_select: true,
+    onError: () => console.log('Google One Tap Login Failed'),
+    promptMomentNotification: (notification) => {
+      console.log('Google One Tap Status:', notification.getMomentType());
+      if (notification.isNotDisplayed()) {
+        console.log('Reason Not Displayed:', notification.getNotDisplayedReason());
+      } else if (notification.isSkippedMoment()) {
+        console.log('Reason Skipped:', notification.getSkippedReason());
+      } else if (notification.isDismissedMoment()) {
+        console.log('Reason Dismissed:', notification.getDismissedReason());
+      }
+    }
+  });
+  return null;
+}
+
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,7 +61,17 @@ export default function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const handleAuthError = () => {
+      setUser(null);
+      deleteCookie('mudcups_token'); // Also delete the invalid cookie
+    };
+    window.addEventListener('auth_error', handleAuthError);
+    return () => window.removeEventListener('auth_error', handleAuthError);
+  }, []);
+
   const [user, setUser] = useState<any>(null);
+
   const [favorites, setFavorites] = useState<string[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('cartItems');
@@ -83,6 +113,7 @@ export default function App() {
           }
         } catch (e) {
           console.error('User not logged in or failed to fetch user', e);
+          // Removed auto-popup of AuthModal so Google One-Tap can take over
         }
         const [cats, items] = await Promise.all([fetchCategories(), fetchFoodItems()]);
         setCategories(cats);
@@ -130,6 +161,24 @@ export default function App() {
     setTimeout(() => setToastMessage(null), 4000);
   };
 
+  const handleGoogleOneTapSuccess = async (credentialResponse: any) => {
+    if (!credentialResponse.credential) return;
+    try {
+      console.log('✅ GOOGLE ONE-TAP LOGIN SUCCESSFUL! Credential received:', credentialResponse);
+      const data = await apiGoogleLogin(credentialResponse.credential);
+      setCookie('mudcups_token', data.access_token);
+      setUser(data.user);
+      if (data.user && data.user.first_name) {
+        localStorage.setItem('userName', `${data.user.first_name} ${data.user.last_name || ''}`.trim());
+      } else if (data.user && data.user.username) {
+        localStorage.setItem('userName', data.user.username);
+      }
+      showToast('Successfully logged in with Google!');
+    } catch (e) {
+      console.error('Google One Tap Login Failed', e);
+    }
+  };
+
   // Filters State
   const [filters, setFilters] = useState<FilterState>({
     searchQuery: '',
@@ -141,6 +190,7 @@ export default function App() {
 
   // Modals visibility
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalView, setAuthModalView] = useState<'login' | 'signup'>('login');
   const [detailItem, setDetailItem] = useState<FoodItem | null>(null);
   const [isClearCartModalOpen, setIsClearCartModalOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
@@ -326,8 +376,8 @@ export default function App() {
       {showHeaderFooter && (
         <Header
           cartCount={totalCartCount}
-          onOpenCart={() => {}} // deprecated
-          onOpenAuth={() => navigate('/login')}
+          onOpenCart={() => { }} // deprecated
+          onOpenAuth={() => { setAuthModalView('login'); setIsAuthModalOpen(true); }}
           user={user}
           sessionId={''}
           hasActiveOrders={activeOrders.length > 0}
@@ -339,63 +389,64 @@ export default function App() {
         <main className="max-w-7xl mx-auto px-4 md:px-6 py-6 space-y-8 flex-grow w-full">
           <Routes>
             <Route path="/" element={
-            isLoading ? (
-              <div className="flex items-center justify-center min-h-[50vh]">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1B4D3E]"></div>
-              </div>
-            ) : (
-            <Home
-              categories={categories}
-              handleOrderDeal={handleOrderDeal}
-              filters={filters}
-              handleUpdateFilters={handleUpdateFilters}
-              activeFilterCount={activeFilterCount}
-              handleResetFilters={handleResetFilters}
-              filteredFoodItems={filteredFoodItems}
-              favorites={favorites}
-              handleToggleFavorite={handleToggleFavorite}
-              getCartQuantity={getCartQuantity}
-              handleAddToCartSimple={handleAddToCartSimple}
-              handleUpdateQuantitySimple={handleUpdateQuantitySimple}
-              setDetailItem={setDetailItem}
-            />
-            )
-          } />
-          <Route path="/offers" element={
-            <OffersPage
-              foodItems={filteredFoodItems}
-              favorites={favorites}
-              handleToggleFavorite={handleToggleFavorite}
-              getCartQuantity={getCartQuantity}
-              handleAddToCartSimple={handleAddToCartSimple}
-              handleUpdateQuantitySimple={handleUpdateQuantitySimple}
-              setDetailItem={setDetailItem}
-            />
-          } />
-          <Route path="/combos" element={
-            <CombosPage
-              foodItems={filteredFoodItems}
-              favorites={favorites}
-              handleToggleFavorite={handleToggleFavorite}
-              getCartQuantity={getCartQuantity}
-              handleAddToCartSimple={handleAddToCartSimple}
-              handleUpdateQuantitySimple={handleUpdateQuantitySimple}
-              setDetailItem={setDetailItem}
-            />
-          } />
-          <Route path="/cart" element={
-            <CartPage
-              user={user}
-              cartItems={cartItems}
-              onUpdateCartQuantity={handleUpdateCartQuantityByIdx}
-              onRemoveCartItem={handleRemoveCartItem}
-              onOrderSuccess={(newOrder) => {
-                setCartItems([]);
-                localStorage.removeItem('cartItems');
-                setActiveOrders((prev) => [newOrder, ...prev]);
-              }}
-            />
-          } />
+              isLoading ? (
+                <div className="flex items-center justify-center min-h-[50vh]">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1B4D3E]"></div>
+                </div>
+              ) : (
+                <Home
+                  categories={categories}
+                  handleOrderDeal={handleOrderDeal}
+                  filters={filters}
+                  handleUpdateFilters={handleUpdateFilters}
+                  activeFilterCount={activeFilterCount}
+                  handleResetFilters={handleResetFilters}
+                  filteredFoodItems={filteredFoodItems}
+                  favorites={favorites}
+                  handleToggleFavorite={handleToggleFavorite}
+                  getCartQuantity={getCartQuantity}
+                  handleAddToCartSimple={handleAddToCartSimple}
+                  handleUpdateQuantitySimple={handleUpdateQuantitySimple}
+                  setDetailItem={setDetailItem}
+                />
+              )
+            } />
+            <Route path="/offers" element={
+              <OffersPage
+                foodItems={filteredFoodItems}
+                favorites={favorites}
+                handleToggleFavorite={handleToggleFavorite}
+                getCartQuantity={getCartQuantity}
+                handleAddToCartSimple={handleAddToCartSimple}
+                handleUpdateQuantitySimple={handleUpdateQuantitySimple}
+                setDetailItem={setDetailItem}
+              />
+            } />
+            <Route path="/combos" element={
+              <CombosPage
+                foodItems={filteredFoodItems}
+                favorites={favorites}
+                handleToggleFavorite={handleToggleFavorite}
+                getCartQuantity={getCartQuantity}
+                handleAddToCartSimple={handleAddToCartSimple}
+                handleUpdateQuantitySimple={handleUpdateQuantitySimple}
+                setDetailItem={setDetailItem}
+              />
+            } />
+            <Route path="/cart" element={
+              <CartPage
+                user={user}
+                cartItems={cartItems}
+                onUpdateCartQuantity={handleUpdateCartQuantityByIdx}
+                onRemoveCartItem={handleRemoveCartItem}
+                onOrderSuccess={(newOrder) => {
+                  setCartItems([]);
+                  localStorage.removeItem('cartItems');
+                  setActiveOrders((prev) => [newOrder, ...prev]);
+                }}
+                onOpenAuth={() => { setAuthModalView('login'); setIsAuthModalOpen(true); }}
+              />
+            } />
             <Route path="/orders" element={
               <OrdersPage
                 activeOrders={activeOrders}
@@ -403,38 +454,6 @@ export default function App() {
                 refreshOrders={loadOrders}
               />
             } />
-            <Route 
-              path="/login" 
-              element={
-                <LoginPage 
-                  onLogin={(token, user) => {
-                    setCookie('mudcups_token', token);
-                    setUser(user);
-                    if (user && user.first_name) {
-                      localStorage.setItem('userName', `${user.first_name} ${user.last_name || ''}`.trim());
-                    } else if (user && user.username) {
-                      localStorage.setItem('userName', user.username);
-                    }
-                  }}
-                />
-              } 
-            />
-            <Route 
-              path="/signup" 
-              element={
-                <SignupPage 
-                  onLogin={(token, user) => {
-                    setCookie('mudcups_token', token);
-                    setUser(user);
-                    if (user && user.first_name) {
-                      localStorage.setItem('userName', `${user.first_name} ${user.last_name || ''}`.trim());
-                    } else if (user && user.username) {
-                      localStorage.setItem('userName', user.username);
-                    }
-                  }}
-                />
-              } 
-            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
@@ -462,7 +481,7 @@ export default function App() {
         <div className="fixed bottom-0 left-0 right-0 p-3 bg-white/90 backdrop-blur-md border-t border-gray-200 z-40 animate-slideUp">
           <div className="max-w-3xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <button 
+              <button
                 onClick={() => setIsClearCartModalOpen(true)}
                 className="p-1 text-gray-400 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                 aria-label="Clear cart"
@@ -471,11 +490,12 @@ export default function App() {
               </button>
               <span className="font-semibold text-gray-800">{totalCartCount} item{totalCartCount > 1 ? 's' : ''} added</span>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => {
                 if (!user) {
-                  navigate('/login?redirect=cart');
+                  setAuthModalView('login');
+                  setIsAuthModalOpen(true);
                 } else {
                   setIsCheckoutModalOpen(true);
                 }
@@ -498,7 +518,7 @@ export default function App() {
 
 
 
-      <CheckoutFlowModal 
+      <CheckoutFlowModal
         isOpen={isCheckoutModalOpen}
         onClose={() => setIsCheckoutModalOpen(false)}
       />
@@ -512,13 +532,13 @@ export default function App() {
             <h3 className="text-lg font-bold text-gray-900 mb-2">Clear Cart?</h3>
             <p className="text-gray-600 text-sm mb-6">Are you sure you want to remove all items from your cart?</p>
             <div className="flex items-center gap-3 w-full">
-              <button 
+              <button
                 onClick={() => setIsClearCartModalOpen(false)}
                 className="flex-1 bg-gray-100 text-gray-800 font-semibold py-3 rounded hover:bg-gray-200 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 onClick={handleClearCart}
                 className="flex-1 bg-[#1B4D3E] text-white font-semibold py-3 rounded hover:bg-[#123329] transition-colors shadow-sm cursor-pointer"
               >
@@ -536,6 +556,24 @@ export default function App() {
           <span className="text-xs font-bold">{toastMessage}</span>
         </div>
       )}
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        initialView={authModalView}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLogin={(token, user) => {
+          setCookie('mudcups_token', token);
+          setUser(user);
+          if (user && user.first_name) {
+            localStorage.setItem('userName', `${user.first_name} ${user.last_name || ''}`.trim());
+          } else if (user && user.username) {
+            localStorage.setItem('userName', user.username);
+          }
+        }}
+      />
+      {/* Google One Tap */}
+      {!isLoading && !user && <GoogleOneTapPrompt onLoginSuccess={handleGoogleOneTapSuccess} />}
     </div>
   );
 }

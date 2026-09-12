@@ -4,10 +4,19 @@ import { getCookie } from '../utils/cookies';
 const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
 
 const apiFetch = async (url: string, options: RequestInit = {}) => {
-  return fetch(url, {
+  const response = await fetch(url, {
     ...options,
     credentials: 'include',
   });
+  if (response.status === 401) {
+    const token = getCookie('mudcups_token');
+    // Only auto-show the login modal if they had a token that expired, 
+    // rather than showing it for guests on initial page load.
+    if (token) {
+      window.dispatchEvent(new CustomEvent('auth_error'));
+    }
+  }
+  return response;
 };
 
 const getHeaders = (isFormData = false) => {
@@ -306,6 +315,19 @@ export const loginUser = async (data: any) => {
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || 'Failed to login');
+  }
+  return response.json();
+};
+
+export const googleLogin = async (credential: string) => {
+  const response = await apiFetch(`${API_BASE_URL}/user/google/`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ id_token: credential }),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.detail || 'Failed to login with Google');
   }
   return response.json();
 };

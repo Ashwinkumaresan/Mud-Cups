@@ -38,7 +38,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
       {/* Image Container */}
       <div
         onClick={() => onOpenDetail(item)}
-        className="relative h-40 sm:h-48 w-full"
+        className="relative aspect-[4/3] w-full"
       >
         <div className="absolute inset-0 rounded overflow-hidden bg-gray-100 shadow-sm">
           <div

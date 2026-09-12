@@ -54,7 +54,7 @@ export const Home: React.FC<HomeProps> = ({
         console.error('Failed to load banners:', err);
       }
     };
-    
+
     const loadCombos = async () => {
       try {
         const data = await fetchCombos();
@@ -87,7 +87,7 @@ export const Home: React.FC<HomeProps> = ({
       </div>
 
       {/* Offer/Game Toggle Layout */}
-      <OfferGameToggle />
+      {/* <OfferGameToggle /> */}
 
       {/* Combos Section */}
       <div className="pt-2">
@@ -141,7 +141,7 @@ export const Home: React.FC<HomeProps> = ({
             handleUpdateFilters({ selectedCategory: cat });
             setTimeout(() => {
               if (menuRef.current) {
-                const yOffset = -100; 
+                const yOffset = -100;
                 const y = menuRef.current.getBoundingClientRect().top + window.scrollY + yOffset;
                 window.scrollTo({ top: y, behavior: 'auto' });
               }
