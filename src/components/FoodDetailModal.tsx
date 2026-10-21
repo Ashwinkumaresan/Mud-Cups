@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FoodItem, CartItem } from '../types';
 import { fetchComboDetail } from '../api';
+import { withFallbackImage } from '../utils/image';
 
 interface FoodDetailModalProps {
   item: FoodItem;
@@ -61,18 +62,16 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
       />
 
       <div className="bg-white w-full rounded-t-2xl shadow-2xl relative z-10 flex flex-col sm:flex-row max-h-[90vh] sm:h-[400px] animate-slideUp overflow-hidden">
-        
-        {/* Close Button (Absolute to whole modal) */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-10 h-10 bg-white/90 sm:bg-gray-100 backdrop-blur sm:backdrop-blur-none rounded-full flex items-center justify-center text-gray-800 shadow-sm hover:bg-white sm:hover:bg-gray-200 transition-colors z-20"
+          className="absolute top-4 right-4 w-10 h-10 bg-white/90 sm:bg-gray-100 backdrop-blur sm:backdrop-blur-none rounded-full flex items-center justify-center text-gray-800 shadow-sm hover:bg-gray-100 transition-colors z-20"
         >
           <span className="material-symbols-outlined font-bold">close</span>
         </button>
 
         {/* Image Section (Top on mobile, Left on desktop) */}
         <div className="relative h-64 sm:h-full sm:w-1/2 bg-gray-100 shrink-0">
-          <img src={item.image || 'https://via.placeholder.com/400x300?text=No+Image'} alt={item.name} className="w-full h-full object-cover" />
+          <img src={withFallbackImage(item.image)} alt={item.name} className="w-full h-full object-cover" />
 
           <div className="absolute bottom-5 left-5 flex gap-2">
             <div className="bg-white/90 backdrop-blur rounded p shadow-sm flex items-center justify-center">
@@ -96,16 +95,16 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
           {/* Scrollable Content */}
           <div className="overflow-y-auto p-5 sm:p-6 sm:pt-16 space-y-1 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <h2 className="text-xl font-extrabold">{displayName}</h2>
-             <div>
-                <span className="font-extrabold text-xl text-[#1B4D3E]">
-                  ₹{item.price.toFixed(2)}
-                </span>
-                {item.originalPrice && (
-                  <div className="text-sm text-gray-400 line-through font-semibold mt-0.5">
-                    ₹{item.originalPrice.toFixed(2)}
-                  </div>
-                )}
-              </div>
+            <div>
+              <span className="font-extrabold text-xl text-[#1B4D3E]">
+                ₹{item.price.toFixed(2)}
+              </span>
+              {item.originalPrice && (
+                <div className="text-sm text-gray-400 line-through font-semibold mt-0.5">
+                  ₹{item.originalPrice.toFixed(2)}
+                </div>
+              )}
+            </div>
             <p className="text-sm text-[#6B6B6B] font-medium leading-relaxed">{subtitle}</p>
 
             {comboData && comboData.foods && comboData.foods.length > 0 && (
@@ -115,7 +114,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
                   {comboData.foods.map((food: any, idx: number) => (
                     <li key={idx} className="flex items-center gap-4">
                       <img 
-                        src={food.image_url || 'https://via.placeholder.com/100'} 
+                        src={withFallbackImage(food.image_url || food.image)} 
                         alt={food.name} 
                         className="w-14 h-14 object-cover rounded-lg shadow-sm"
                       />
@@ -150,7 +149,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
 
             <button
               onClick={handleAddToCart}
-              className="flex-1 h-11 sm:h-12 bg-[#1B4D3E] text-sm text-white px-4 sm:px-6 rounded-lg font-bold shadow-sm hover:bg-[#123329] transition-colors flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-0.5 sm:gap-0"
+              className="flex-1 h-11 sm:h-12 bg-[#1B4D3E] text-sm text-white px-4 sm:px-6 rounded-lg font-bold shadow-sm hover:bg-[#123329] transition-colors flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2"
             >
               <span>Add to Cart</span>
               <span className="text-[10px] sm:text-base font-semibold sm:font-bold opacity-90 sm:opacity-100">₹{totalPrice.toFixed(2)}</span>

@@ -1,5 +1,6 @@
 import { Category, FoodItem, ActiveOrder, Combo, Banner } from '../types';
 import { getCookie } from '../utils/cookies';
+import { withFallbackImage } from '../utils/image';
 // const API_BASE_URL = `http://${window.location.hostname}:8000/api`;
 const API_BASE_URL = 'https://api.backend.mudcup.sasalemsuperservice.com/api';
 
@@ -44,7 +45,11 @@ export const fetchBanners = async (): Promise<Banner[]> => {
     throw new Error('Failed to fetch banners');
   }
   const data = await response.json();
-  return data.results || data;
+  return (data.results || data).map((item: any) => ({
+    ...item,
+    image: withFallbackImage(item.image_url || item.image),
+    image_url: withFallbackImage(item.image_url || item.image),
+  }));
 };
 
 export const fetchCategories = async (): Promise<Category[]> => {
@@ -57,7 +62,7 @@ export const fetchCategories = async (): Promise<Category[]> => {
   return results.map((item: any) => ({
     ...item,
     id: item.id ? item.id.toString() : '',
-    image: item.image_url || item.image || '',
+    image: withFallbackImage(item.image_url || item.image),
     itemCount: typeof item.food_count === 'number' ? item.food_count : (item.itemCount || 0),
   }));
 };
@@ -73,7 +78,7 @@ export const fetchFoodItems = async (): Promise<FoodItem[]> => {
     ...item,
     price: (item.discount_price && Number(item.discount_price) > 0) ? Number(item.discount_price) : Number(item.price),
     originalPrice: (item.discount_price && Number(item.discount_price) > 0) ? Number(item.price) : undefined,
-    image: item.image_url || item.image,
+    image: withFallbackImage(item.image_url || item.image),
   }));
 };
 
@@ -88,7 +93,7 @@ export const fetchOffers = async (): Promise<FoodItem[]> => {
     ...item,
     price: item.discount_price ? Number(item.discount_price) : Number(item.price),
     originalPrice: item.discount_price ? Number(item.price) : undefined,
-    image: item.image_url || item.image,
+    image: withFallbackImage(item.image_url || item.image),
     category: 'Offers'
   }));
 };
@@ -104,7 +109,7 @@ export const fetchCombos = async (): Promise<Combo[]> => {
     ...item,
     price: item.combo_reduced_price ? Number(item.combo_reduced_price) : 0,
     originalPrice: item.original_total ? Number(item.original_total) : undefined,
-    image: item.image_url,
+    image: withFallbackImage(item.image_url || item.image),
     category: 'Combos'
   }));
 };
@@ -119,7 +124,7 @@ export const fetchComboDetail = async (id: string | number): Promise<any> => {
     ...data,
     price: data.combo_reduced_price ? Number(data.combo_reduced_price) : 0,
     originalPrice: data.original_total ? Number(data.original_total) : undefined,
-    image: data.image_url,
+    image: withFallbackImage(data.image_url || data.image),
     category: 'Combos'
   };
 };
@@ -203,7 +208,7 @@ export const fetchCategoryFoodItems = async (categoryId: string): Promise<any> =
     ...item,
     price: (item.discount_price && Number(item.discount_price) > 0) ? Number(item.discount_price) : Number(item.price),
     originalPrice: (item.discount_price && Number(item.discount_price) > 0) ? Number(item.price) : undefined,
-    image: item.image_url || item.image,
+    image: withFallbackImage(item.image_url || item.image),
   }));
 };
 
@@ -366,4 +371,3 @@ export const verifyRazorpayPayment = async (data: any) => {
   }
   return response.json();
 };
-

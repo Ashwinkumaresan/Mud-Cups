@@ -1,5 +1,6 @@
 import React from 'react';
 import { Category } from '../../types';
+import { withFallbackImage } from '../../utils/image';
 
 interface CategoryListProps {
   categories: Category[];
@@ -55,7 +56,7 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                 }`}
               >
                 <img
-                  src={cat.image || 'https://via.placeholder.com/100x100?text=Category'}
+                  src={withFallbackImage(cat.image)}
                   alt={cat.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />

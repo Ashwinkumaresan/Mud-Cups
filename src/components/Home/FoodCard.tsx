@@ -1,5 +1,6 @@
 import React from 'react';
 import { FoodItem } from '../../types';
+import { withFallbackImage } from '../../utils/image';
 
 interface FoodCardProps {
   item: FoodItem;
@@ -33,6 +34,8 @@ export const FoodCard: React.FC<FoodCardProps> = ({
     }
   }
 
+  const imageUrl = withFallbackImage(item.image);
+
   return (
     <article className="group relative flex flex-col h-full cursor-pointer">
       {/* Image Container */}
@@ -43,7 +46,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
         <div className="absolute inset-0 rounded overflow-hidden bg-gray-100 shadow-sm">
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-            style={{ backgroundImage: `url('${item.image || 'https://via.placeholder.com/400x300?text=No+Image'}')` }}
+            style={{ backgroundImage: `url('${imageUrl}')` }}
           />
         </div>
         
